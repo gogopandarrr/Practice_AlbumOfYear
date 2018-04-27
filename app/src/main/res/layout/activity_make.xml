@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.q1.practice_albumofyear.MakeActivity">
+
+
+    <com.leinardi.android.speeddial.SpeedDialOverlayLayout
+        android:id="@+id/overlay"
+        app:clickable_overlay="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></com.leinardi.android.speeddial.SpeedDialOverlayLayout>
+
+    <com.leinardi.android.speeddial.SpeedDialView
+        android:id="@+id/speedDial"
+        android:layout_gravity="right|bottom"
+        android:layout_margin="2dp"
+        app:sdExpansionMode="top"
+        app:sdMainFabOpenSrc="@drawable/ic_menu"
+        app:sdMainFabCloseSrc="@drawable/ic_close"
+        app:layout_behavior="@string/speeddial_scrolling_view_snackbar_behavior"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+    </com.leinardi.android.speeddial.SpeedDialView>
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <android.support.v4.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/cover_recycler"
+                    android:layout_width="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_height="wrap_content"> </android.support.v7.widget.RecyclerView>
+
+                <android.support.v7.widget.RecyclerView
+                    android:padding="4dp"
+                    android:id="@+id/info_recycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"> </android.support.v7.widget.RecyclerView>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+
+                    />
+
+            </LinearLayout>
+
+        </android.support.v4.widget.NestedScrollView>
+
+
+    </LinearLayout>
+
+
+
+
+</android.support.design.widget.CoordinatorLayout>

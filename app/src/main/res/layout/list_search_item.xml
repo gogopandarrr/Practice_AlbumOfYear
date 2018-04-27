@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+<android.support.v7.widget.CardView
+    android:id="@+id/cardView"
+    app:cardCornerRadius="4dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+
+            android:layout_centerHorizontal="true"
+            android:id="@+id/iv_search_cover"
+            android:layout_margin="2dp"
+            android:src="@drawable/cover5"
+            android:layout_width="125dp"
+            android:layout_height="125dp" />
+        <TextView
+            android:textSize="8dp"
+            android:gravity="center"
+            android:text="In a Poem Unlimited"
+            android:id="@+id/tv_search_album"
+            android:layout_below="@+id/iv_search_cover"
+            android:layout_width="125dp"
+            android:layout_margin="2dp"
+            android:layout_height="10dp" />
+        <TextView
+            android:id="@+id/tv_search_artist"
+            android:visibility="invisible"
+            android:layout_width="100dp"
+            android:layout_height="100dp" />
+        <TextView
+            android:id="@+id/tv_search_info"
+            android:visibility="invisible"
+            android:layout_width="100dp"
+            android:layout_height="100dp" />
+
+
+
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>
+
+
+</RelativeLayout>
