@@ -7,6 +7,7 @@ package com.q1.practice_albumofyear;
 public class Lists_SearchedAlbum {
 
     String title, artist, coverL, coverXL, url;
+    int rank;
 
     public Lists_SearchedAlbum(String name, String artist, String coverL, String coverXL, String url) {
         this.title = name;
@@ -36,4 +37,6 @@ public class Lists_SearchedAlbum {
     public String getUrl() {
         return url;
     }
+
+
 }

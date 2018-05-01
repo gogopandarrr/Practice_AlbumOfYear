@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Practice_AlbumOfYear</string>
 
+
+    <string name="title_activity_make">Make Activity</string>
     <string name="card_title_preview">Preview</string>
     <string name="card_title_credits">Credits</string>
 
@@ -26,7 +28,7 @@
     <string name="pref_key_transition_time" translatable="false">pref_key_transition_time</string>
 
     <string name="mi_rate_on_github">Rate on GitHub</string>
-    <string name="title_activity_make">MakeActivity</string>
+
 
 
     <string name="app_version">v%1$s</string>
@@ -60,5 +62,15 @@
     <string name="main_fab_color_close">Main FAB color close</string>
     <string name="none">None</string>
     <string name="action_toggle_list">Toggle list</string>
+    <string name="text_input_message">Input must match \\\\w+ or dialog won\'t accept it. That is because TextFilter object is set.</string>
+    <string name="text_input_error_message">I told you. Please type something correct.</string>
+
+
+
+
+    <string name="text_input_title">Type name of this list</string>
+    <string name="basic_title_make">Make Your Own Collection</string>
+
+
 </resources>
 

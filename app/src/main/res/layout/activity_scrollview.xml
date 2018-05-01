@@ -9,12 +9,12 @@
     <ImageView
         android:id="@+id/home"
         style="@style/ClickableImageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_gravity="start"
         android:layout_margin="8dp"
         android:padding="8dp"
-        android:src="@drawable/bt_delete" />
+        android:src="@drawable/ic_back" />
 
     <Space
         android:layout_width="wrap_content"
@@ -22,7 +22,7 @@
         android:layout_weight="10" />
 
     <TextView
-        android:id="@+id/item_name"
+        android:id="@+id/tv_title_Collection"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -30,20 +30,20 @@
         android:textColor="@android:color/black"
         android:textSize="16sp"
         android:textStyle="bold"
-        android:text="Stoneware + Porcelain Plate" />
+        android:text="your Collection" />
 
     <Space
         android:layout_width="wrap_content"
         android:layout_height="4dp" />
 
     <TextView
-        android:id="@+id/item_price"
+        android:id="@+id/tv_subTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:textColor="@color/shopAccent"
         android:textStyle="bold"
-        android:text="$24.00 USD" />
+        android:text="2018 May (25 album)" />
 
     <Space
         android:layout_width="wrap_content"
@@ -78,11 +78,12 @@
             android:layout_height="wrap_content" />
 
         <android.support.design.widget.FloatingActionButton
-            android:id="@+id/item_btn_buy"
+            android:id="@+id/item_btn_make"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_listen"
             android:tint="@android:color/white"
+            android:onClick="clickMake"
             />
 
         <Space
@@ -90,13 +91,15 @@
             android:layout_height="wrap_content" />
 
         <ImageView
-            android:id="@+id/item_btn_rate"
+            android:id="@+id/del_collection"
             style="@style/ClickableImageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="8dp"
-            android:src="@android:drawable/star_off"
-            android:tint="@color/shopSecondary" />
+            android:src="@drawable/btn_del"
+            android:tint="@color/shopSecondary"
+            android:onClick="clickDel"
+            />
 
     </LinearLayout>
 
@@ -113,7 +116,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/btn_smooth_scroll"
+            android:text="upload"
             android:textAllCaps="true"
             android:textColor="@color/shopAccent" />
 
@@ -123,7 +126,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/btn_transition_time"
+            android:text="setting"
             android:textAllCaps="true"
             android:textColor="@color/shopAccent" />
 

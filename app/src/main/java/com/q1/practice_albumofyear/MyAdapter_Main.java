@@ -18,13 +18,15 @@ import java.util.ArrayList;
 public class MyAdapter_Main extends RecyclerView.Adapter {
 
     Context context;
-    ArrayList<Lists_Album> listsAlbums;
+    ArrayList<Lists_Collection> collections;
     private boolean headerFlag = false;
     private static  int TYPE_HEADER = 0;
 
-    public MyAdapter_Main(Context context, ArrayList<Lists_Album> listsAlbums) {
+    public MyAdapter_Main(Context context, ArrayList<Lists_Collection> collections) {
         this.context = context;
-        this.listsAlbums = listsAlbums;
+        this.collections = collections;
+
+        setHasStableIds(true);
     }
 
     @Override
@@ -56,32 +58,52 @@ public class MyAdapter_Main extends RecyclerView.Adapter {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
 
-//        Lists_Album listsAlbum = listsAlbums.get(position);
-
         VH vh = (VH) holder;
 
 
     }
 
     @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+
+    @Override
     public int getItemCount() {
-        return listsAlbums.size()+1;
+        return collections.size()+1;
     }
 
 
     @Override
     public int getItemViewType(int position) {
-        return position;
+//        if(position==TYPE_HEADER) return TYPE_HEADER;
+//        else
+            return position;
+
+
+
     }
+
+
+    public void delete(int position){
+
+
+        collections.remove(position);
+        notifyItemRemoved(position);
+
+    }
+
 
     class VH extends RecyclerView.ViewHolder{
 
         boolean isHeader = headerFlag;
-        ImageView iv_collection, btn_add;
+        ImageView iv_collection, btn_add, del;
 
 
         public VH(View itemView) {
             super(itemView);
+
 
 
             if(!isHeader){

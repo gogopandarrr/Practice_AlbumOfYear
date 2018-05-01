@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
 
+import com.bumptech.glide.Glide;
 import com.hsalf.smilerating.SmileRating;
 import com.luseen.autolinklibrary.AutoLinkMode;
 import com.luseen.autolinklibrary.AutoLinkTextView;
@@ -36,10 +37,12 @@ public class MyAdapter2 extends RecyclerView.Adapter {
     MyAdapter myAdapter;
     Context context;
     ArrayList<Lists_Album> listsAlbums;
+    Lists_Album listsAlbum;
     Resources res;
     RecyclerView recyclerView;
     private static final int UNSELECTED = -1;
     private int selectedItem = UNSELECTED;
+    VH vh;
 
     public MyAdapter2(Context context, ArrayList<Lists_Album> listsAlbums, MyAdapter myAdapter, RecyclerView recyclerView) {
         this.context = context;
@@ -70,51 +73,13 @@ public class MyAdapter2 extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
-        final Lists_Album listsAlbum = listsAlbums.get(position);
+        listsAlbum = listsAlbums.get(position);
 
-            VH vh = (VH) holder;
+            vh = (VH) holder;
 
             vh.artist.setText(listsAlbum.artist);
             vh.title.setText(listsAlbum.album);
-
-
-
-
-
-
-
-        vh.smileRating.setOnSmileySelectionListener(new SmileRating.OnSmileySelectionListener() {
-            @Override
-            public void onSmileySelected(int smiley, boolean reselected) {
-                switch (smiley){
-
-                    case SmileRating.BAD:
-                        listsAlbum.setRankImg(R.drawable.emo2_bad);
-                            myAdapter.notifyDataSetChanged();
-                        break;
-                    case SmileRating.GOOD:
-                        listsAlbum.setRankImg(R.drawable.emo4_good);
-                        myAdapter.notifyDataSetChanged();
-                        break;
-                    case SmileRating.GREAT:
-                        listsAlbum.setRankImg(R.drawable.emo5_great);
-                        myAdapter.notifyDataSetChanged();
-                        break;
-                    case SmileRating.OKAY:
-                        listsAlbum.setRankImg(R.drawable.emo3_okay);
-                        myAdapter.notifyDataSetChanged();
-                        break;
-                    case SmileRating.TERRIBLE:
-                        listsAlbum.setRankImg(R.drawable.emo1_terrible);
-                        myAdapter.notifyDataSetChanged();
-                        break;
-
-
-                }
-
-            }
-        });
-
+            Glide.with(context).load(listsAlbum.cover).into(vh.cover);
 
 
     }
@@ -148,16 +113,16 @@ public class MyAdapter2 extends RecyclerView.Adapter {
         AutoLinkTextView comment;
         EditText ev_title, ev_comment;
         ExpandableLayout expandableLayout;
-        ImageView btnOpen;
-        boolean isClicked =false;
+        ImageView btnOpen, cover, rank;
+
 
 
         public VH(View itemView) {
             super(itemView);
 
 
-
-
+            rank= itemView.findViewById(R.id.rank);
+            cover= itemView.findViewById(R.id.cover);
             smileRating = itemView.findViewById(R.id.smile_rating);
             artist = itemView.findViewById(R.id.tv_artist);
             title = itemView.findViewById(R.id.tv_albumTitle);
@@ -222,6 +187,7 @@ public class MyAdapter2 extends RecyclerView.Adapter {
                             if(!hasFocus) {
 
                                 title.setText(ev_title.getText().toString());
+                                listsAlbum.setAlbum(title.getText().toString());
                                 switcherT.showNext();
 
                             }
@@ -250,6 +216,7 @@ public class MyAdapter2 extends RecyclerView.Adapter {
                             if(!hasFocus) {
 
                                 comment.setAutoLinkText(ev_comment.getText().toString());
+                                listsAlbum.setOpinion(comment.getText().toString());
                                 switcherC.showNext();
 
                             }
@@ -262,6 +229,48 @@ public class MyAdapter2 extends RecyclerView.Adapter {
                 }
             });
 
+            smileRating.setOnSmileySelectionListener(new SmileRating.OnSmileySelectionListener() {
+                @Override
+                public void onSmileySelected(int smiley, boolean reselected) {
+
+                    int position = getAdapterPosition();
+                    VH holder= (VH) recyclerView.findViewHolderForAdapterPosition(position);
+
+
+
+                    switch (smiley){
+
+                        case SmileRating.BAD:
+                            listsAlbum.setRankImg(R.drawable.emo2_bad);
+                            Glide.with(context).load(listsAlbum.getRankImg()).into(holder.rank);
+                            notifyDataSetChanged();
+                            break;
+                        case SmileRating.GOOD:
+                            listsAlbum.setRankImg(R.drawable.emo4_good);
+                            Glide.with(context).load(listsAlbum.getRankImg()).into(holder.rank);
+                            notifyDataSetChanged();
+                            break;
+                        case SmileRating.GREAT:
+                            listsAlbum.setRankImg(R.drawable.emo5_great);
+                            Glide.with(context).load(listsAlbum.getRankImg()).into(holder.rank);
+                            notifyDataSetChanged();
+                            break;
+                        case SmileRating.OKAY:
+                            listsAlbum.setRankImg(R.drawable.emo3_okay);
+                            Glide.with(context).load(listsAlbum.getRankImg()).into(holder.rank);
+                            notifyDataSetChanged();
+                            break;
+                        case SmileRating.TERRIBLE:
+                            listsAlbum.setRankImg(R.drawable.emo1_terrible);
+                            Glide.with(context).load(listsAlbum.getRankImg()).into(holder.rank);
+                            notifyDataSetChanged();
+                            break;
+
+
+                    }
+
+                }
+            });
 
 
 

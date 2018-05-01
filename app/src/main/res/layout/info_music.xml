@@ -7,7 +7,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/info_card"
     android:layout_marginTop="15dp"
-    app:cardCornerRadius="20dp"
+    app:cardCornerRadius="12dp"
     app:cardUseCompatPadding="true"
     >
 
@@ -19,66 +19,93 @@
         android:layout_alignRight="@+id/cardView2"
         android:layout_below="@+id/cardView2">
 
+        <ImageView
+            android:id="@+id/cover"
+            android:src="@drawable/cover5"
+            android:layout_margin="10dp"
+            android:layout_width="120dp"
+            android:layout_height="120dp" />
+
 
         <ViewSwitcher
             android:id="@+id/switcher_album"
+            android:layout_below="@id/tv_artist"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginLeft="150dp"
             android:padding="2dp">
 
             <TextView
                 android:id="@+id/tv_albumTitle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:clickable="true"
-                android:gravity="center"
                 android:text="album title"
-                android:textSize="16dp"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/ev_albumTitle"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:gravity="center"
+                android:textSize="12sp"
                 android:text="album title"
-                android:textSize="16dp"
                 android:textStyle="bold" />
+        </ViewSwitcher>
+
+        <ViewSwitcher
+            android:layout_below="@+id/switcher_album"
+            android:id="@+id/switcher_comment"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="135dp"
+            >
+            <com.luseen.autolinklibrary.AutoLinkTextView
+                android:id="@+id/tv_comment"
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:hint="Press Long Click to Edit"
+                android:textSize="12sp" />
+
+
+            <EditText
+                android:id="@+id/ev_comment"
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:hint="#Tag, Comment"
+                android:textSize="12sp" />
         </ViewSwitcher>
 
         <TextView
             android:id="@+id/tv_artist"
-            android:layout_width="180dp"
-            android:layout_marginLeft="10dp"
-            android:gravity="center"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="150dp"
+            android:layout_width="240dp"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/switcher_album"
             android:textSize="12dp"
             android:text="artist"
             android:textColor="#9c6409" />
 
+        <ImageView
+            android:scaleType="centerInside"
+            android:id="@+id/rank"
+            android:src="@drawable/emo0_basic"
+            android:layout_below="@+id/switcher_album"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="4dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp" />
 
 
-            />
-
-
-
-        <com.hsalf.smilerating.SmileRating
-            android:id="@+id/smile_rating"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginLeft="200dp" />
 
 
         <LinearLayout
-            android:layout_marginTop="5dp"
+            android:id="@+id/btns"
             android:layout_marginRight="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/smile_rating"
             android:layout_alignParentRight="true"
             android:gravity="center"
             android:orientation="horizontal"
@@ -111,16 +138,15 @@
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_marginTop="10dp"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tv_artist">
+            android:layout_below="@+id/switcher_comment">
 
             <ImageView
                 android:clickable="true"
                 android:id="@+id/btn_open"
                 android:layout_width="match_parent"
                 android:scaleType="centerInside"
-                android:layout_height="16dp"
+                android:layout_height="20dp"
                 android:src="@drawable/ic_open"
                 />
 
@@ -136,32 +162,15 @@
             app:el_parallax="0.5"
             >
 
-            <ViewSwitcher
-                android:id="@+id/switcher_comment"
+
+            <com.hsalf.smilerating.SmileRating
+                android:id="@+id/smile_rating"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/smile_rating"
-                android:layout_alignStart="@+id/smile_rating"
-                android:layout_below="@id/smile_rating"
-                >
+                android:layout_marginLeft="190dp" />
 
 
-                <com.luseen.autolinklibrary.AutoLinkTextView
-                    android:id="@+id/tv_comment"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:hint="write tag or your comment"
-                    android:textSize="12sp" />
 
-
-                <EditText
-                    android:id="@+id/ev_comment"
-                    android:layout_width="220dp"
-                    android:layout_height="wrap_content"
-                    android:hint="#tag, your comment"
-                    android:textSize="12sp" />
-            </ViewSwitcher>
 
 
         </net.cachapa.expandablelayout.ExpandableLayout>

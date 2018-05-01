@@ -10,24 +10,25 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.animation.OvershootInterpolator;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.ViewSwitcher;
 
 
 import com.leinardi.android.speeddial.SpeedDialActionItem;
 import com.leinardi.android.speeddial.SpeedDialOverlayLayout;
 import com.leinardi.android.speeddial.SpeedDialView;
+import com.yarolegovich.lovelydialog.LovelyTextInputDialog;
 
-import net.cachapa.expandablelayout.ExpandableLayout;
 
 import java.util.ArrayList;
 
 public class MakeActivity extends AppCompatActivity {
-
 
     ArrayList<Lists_Album> listsAlbums = new ArrayList<>();
     RecyclerView infoRecycle,coverRecycle;
@@ -35,6 +36,8 @@ public class MakeActivity extends AppCompatActivity {
     MyAdapter adapter;
     SpeedDialView speedDialView;
     SpeedDialOverlayLayout overlayLayout;
+    TextView tv_name;
+
 
 
 
@@ -44,6 +47,7 @@ public class MakeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         setContentView(R.layout.activity_make);
+
 
 
         overlayLayout = findViewById(R.id.overlay);
@@ -81,6 +85,7 @@ public class MakeActivity extends AppCompatActivity {
 
 
                     case R.id.fab_save:
+                        clickSave();
                         speedDialView.close();
                         return true;
 
@@ -101,7 +106,19 @@ public class MakeActivity extends AppCompatActivity {
         adapter2 = new MyAdapter2(this, listsAlbums, adapter, infoRecycle);
         infoRecycle.setAdapter(adapter2);
         coverRecycle.setAdapter(adapter);
+        tv_name = findViewById(R.id.tv_nameCollection);
 
+
+
+        tv_name.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                showTextInputDialog();
+
+
+            }
+        });
 
 
 
@@ -112,9 +129,25 @@ public class MakeActivity extends AppCompatActivity {
         coverRecycle.setLayoutManager(layoutManager);
         infoRecycle.setLayoutManager(layoutManager2);
 
-
-
+        showTextInputDialog();
     }//oc
+
+    private void showTextInputDialog() {
+        new LovelyTextInputDialog(this, R.style.EditTextTintTheme)
+                .setTopColorRes(R.color.darkDeepOrange)
+                .setTitle(R.string.text_input_title)
+                .setIcon(R.drawable.ic_listen)
+                .setConfirmButton(android.R.string.ok, new LovelyTextInputDialog.OnTextInputConfirmListener() {
+                    @Override
+                    public void onTextInputConfirmed(String text) {
+                        tv_name.setText(text);
+                    }})
+                .setNegativeButton(android.R.string.no, null)
+                .show();
+    }
+
+
+
     @Override
     public void onBackPressed() {
         if(speedDialView.isOpen())speedDialView.close();
@@ -150,6 +183,18 @@ public class MakeActivity extends AppCompatActivity {
 
     }
 
+    public void clickSave(){
+
+        Intent intent = getIntent();
+        intent.putParcelableArrayListExtra("mylist",listsAlbums);
+        intent.putExtra("nameList",tv_name.getText().toString());
+        setResult(RESULT_OK,intent);
+
+        finish();
+
+
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
@@ -158,18 +203,23 @@ public class MakeActivity extends AppCompatActivity {
 
             case 10:
                 if(resultCode==RESULT_OK) {
-                    listsAlbums.add(new Lists_Album(R.drawable.emo0_basic,
+                            listsAlbums.add(new Lists_Album(R.drawable.emo0_basic,
                             data.getStringExtra("cover"), data.getStringExtra("artist"),
                             data.getStringExtra("title"), data.getStringExtra("url"), null));
+
+
 
                 }
 
                 break;
 
+
+
         }//switch
 
         adapter.notifyDataSetChanged();
         adapter2.notifyDataSetChanged();
+
 
         super.onActivityResult(requestCode, resultCode, data);
     }
