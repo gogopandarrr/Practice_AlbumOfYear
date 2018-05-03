@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
     DiscreteScrollView discreteScrollView;
     InfiniteScrollAdapter infiniteScrollAdapter;
     TextView title, subTitle;
+    MyAdapter_Main adapterMain;
 
 
 
@@ -46,8 +47,9 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
         discreteScrollView = findViewById(R.id.myCollections);
         discreteScrollView.setOrientation(DSVOrientation.HORIZONTAL);
         discreteScrollView.addOnItemChangedListener(this);
-        infiniteScrollAdapter = InfiniteScrollAdapter.wrap(new MyAdapter_Main(this,collections));
-        discreteScrollView.setAdapter(infiniteScrollAdapter);
+        adapterMain= new MyAdapter_Main(this, collections);
+
+        discreteScrollView.setAdapter(adapterMain);
         discreteScrollView.setItemTransitionTimeMillis(200);
         discreteScrollView.setItemTransformer(new ScaleTransformer.Builder().setMinScale(0.8f).build());
 
@@ -101,16 +103,16 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
     @Override
     public void onCurrentItemChanged(@Nullable RecyclerView.ViewHolder viewHolder, int adapterPosition) {
 
-        int position = infiniteScrollAdapter.getRealPosition(adapterPosition);
-
-
-        if(position>0){
-
-            onListAdded(collections.get(position-1));
-
-
-        }
-        else title.setText(R.string.basic_title_make);
+//        int position = adapterMain.getRealPosition(adapterPosition);
+//
+//
+//        if(position>0){
+//
+//            onListAdded(collections.get(position-1));
+//
+//
+//        }
+//        else title.setText(R.string.basic_title_make);
 
 
     }
@@ -129,8 +131,7 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
 
             collections.add(new Lists_Collection(listsAlbums, data.getStringExtra("nameList")));
 
-            Log.e("a1", data.getStringExtra("nameList"));
-            infiniteScrollAdapter.notifyItemInserted(collections.size());
+            adapterMain.notifyItemInserted(collections.size());
 
 
         }
