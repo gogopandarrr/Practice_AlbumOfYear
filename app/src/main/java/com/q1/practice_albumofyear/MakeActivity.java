@@ -186,7 +186,7 @@ public class MakeActivity extends AppCompatActivity {
     public void clickSave(){
 
         Intent intent = getIntent();
-        intent.putParcelableArrayListExtra("mylist",listsAlbums);
+        intent.putParcelableArrayListExtra("myList",listsAlbums);
         intent.putExtra("nameList",tv_name.getText().toString());
         setResult(RESULT_OK,intent);
 

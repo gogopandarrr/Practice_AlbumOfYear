@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 
 import android.widget.ImageView;
 
+import com.goka.kenburnsview.KenBurnsView;
+
 import java.util.ArrayList;
 
 /**
@@ -20,14 +22,19 @@ public class MyAdapter_Main extends RecyclerView.Adapter {
 
     Context context;
     ArrayList<Lists_Collection> collections;
+    ArrayList<Lists_Url> listsUrl;
+    ArrayList<Integer> listBasicCover = new ArrayList<>();
     private boolean headerFlag = false;
-    private static  int TYPE_HEADER = 0;
+    private static final int TYPE_HEADER = 0;
+    private static final int TYPE_ITEM = 1;
 
-    public MyAdapter_Main(Context context, ArrayList<Lists_Collection> collections) {
+    public MyAdapter_Main(Context context, ArrayList<Lists_Collection> collections,ArrayList<Lists_Url> listsUrl) {
         this.context = context;
         this.collections = collections;
-
+        this.listsUrl = listsUrl;
         setHasStableIds(true);
+
+        listBasicCover.add(R.drawable.cover5);
     }
 
     @Override
@@ -57,10 +64,23 @@ public class MyAdapter_Main extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-
-
         VH vh = (VH) holder;
-        Log.e("a2","aaaaaaaaaaaaaaa");
+
+        if(!headerFlag) {
+
+
+            Log.e("a2", position + "");
+            Log.e("a3",listsUrl.size()+"");
+            Log.e("a4",listsUrl.get(position-1).getUrls().size()+"");
+
+            if(listsUrl.get(position-1).getUrls().size()!=0) vh.kenBurnsView.initStrings(listsUrl.get(position - 1).getUrls());
+            else vh.kenBurnsView.initResourceIDs(listBasicCover);
+
+        }
+
+
+
+
 
     }
 
@@ -78,8 +98,8 @@ public class MyAdapter_Main extends RecyclerView.Adapter {
 
     @Override
     public int getItemViewType(int position) {
-//        if(position==TYPE_HEADER) return TYPE_HEADER;
-//        else
+        if(position==TYPE_HEADER) return TYPE_HEADER;
+        else
             return position;
 
 
@@ -99,7 +119,8 @@ public class MyAdapter_Main extends RecyclerView.Adapter {
     class VH extends RecyclerView.ViewHolder{
 
         boolean isHeader = headerFlag;
-        ImageView iv_collection, btn_add, del;
+        ImageView btn_add;
+        KenBurnsView kenBurnsView;
 
 
         public VH(View itemView) {
@@ -108,7 +129,7 @@ public class MyAdapter_Main extends RecyclerView.Adapter {
 
 
             if(!isHeader){
-                iv_collection= itemView.findViewById(R.id.iv_collection);
+                kenBurnsView= itemView.findViewById(R.id.kenburns);
 
             }else{
                 btn_add= itemView.findViewById(R.id.iv_btnAdd);

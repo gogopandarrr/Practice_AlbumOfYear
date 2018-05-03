@@ -23,6 +23,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements DiscreteScrollView.OnItemChangedListener, View.OnClickListener{
 
+    ArrayList<Lists_Url> listsUrl = new ArrayList<>();
 
 
     ArrayList<Lists_Collection> collections= new ArrayList<>();
@@ -47,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
         discreteScrollView = findViewById(R.id.myCollections);
         discreteScrollView.setOrientation(DSVOrientation.HORIZONTAL);
         discreteScrollView.addOnItemChangedListener(this);
-        adapterMain= new MyAdapter_Main(this, collections);
+        adapterMain= new MyAdapter_Main(this, collections, listsUrl);
 
         discreteScrollView.setAdapter(adapterMain);
         discreteScrollView.setItemTransitionTimeMillis(200);
@@ -128,6 +129,24 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
 
 
             listsAlbums = data.getParcelableArrayListExtra("myList");
+
+            ArrayList<String>urls = new ArrayList<>();
+            ArrayList<String>temp = new ArrayList<>();
+
+            for(int i=0;i<listsAlbums.size();i++ ){
+
+                temp.add(listsAlbums.get(i).getCover());
+
+            }
+            Log.e("xxx",temp.size()+"");
+
+            urls.addAll(temp);
+
+            listsUrl.add(new Lists_Url(urls));
+
+            temp.clear();
+
+
 
             collections.add(new Lists_Collection(listsAlbums, data.getStringExtra("nameList")));
 
