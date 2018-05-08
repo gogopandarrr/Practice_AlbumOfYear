@@ -1,16 +1,21 @@
 package com.q1.practice_albumofyear;
 
 import android.content.Context;
-import android.media.Image;
+import android.support.transition.TransitionManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import android.widget.ImageView;
 
-import com.goka.kenburnsview.KenBurnsView;
+import android.widget.ImageView;
+import android.widget.ViewSwitcher;
+
+import com.bumptech.glide.Glide;
+import com.flaviofaria.kenburnsview.KenBurnsView;
+import com.flaviofaria.kenburnsview.RandomTransitionGenerator;
+import com.flaviofaria.kenburnsview.Transition;
 
 import java.util.ArrayList;
 
@@ -22,19 +27,17 @@ public class MyAdapter_Main extends RecyclerView.Adapter {
 
     Context context;
     ArrayList<Lists_Collection> collections;
-    ArrayList<Lists_Url> listsUrl;
-    ArrayList<Integer> listBasicCover = new ArrayList<>();
-    private boolean headerFlag = false;
-    private static final int TYPE_HEADER = 0;
-    private static final int TYPE_ITEM = 1;
+    ArrayList<Lists_Album> listsAlbums;
+    ViewSwitcher mViewSwitcher;
+    KenBurnsView[] kbView = new KenBurnsView[2];
 
-    public MyAdapter_Main(Context context, ArrayList<Lists_Collection> collections,ArrayList<Lists_Url> listsUrl) {
+    private int mTransitionsCount = 0;
+    private static final int TRANSITIONS_TO_SWITCH = 1;
+
+    public MyAdapter_Main(Context context, ArrayList<Lists_Collection> collections) {
         this.context = context;
         this.collections = collections;
-        this.listsUrl = listsUrl;
-        setHasStableIds(true);
 
-        listBasicCover.add(R.drawable.cover5);
     }
 
     @Override
@@ -42,19 +45,7 @@ public class MyAdapter_Main extends RecyclerView.Adapter {
         LayoutInflater inflater = LayoutInflater.from(context);
         View view;
 
-        if(viewType==TYPE_HEADER){
-
-            headerFlag =true;
-            view= inflater.inflate(R.layout.list_colletion_header, parent, false);
-
-
-
-        }else{
-
-            headerFlag= false;
             view= inflater.inflate(R.layout.list_colletion, parent, false);
-        }
-
 
         VH holder = new VH(view);
 
@@ -64,25 +55,26 @@ public class MyAdapter_Main extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        VH vh = (VH) holder;
+       VH vh = (VH) holder;
 
-        if(!headerFlag) {
+        Lists_Collection collection = collections.get(position);
+        listsAlbums = collection.getListsAlbums();
 
+        if (listsAlbums.size()==1) {
+            for (int i = 0; i < 2; i++) {
+                Glide.with(context).load(listsAlbums.get(0).getCover()).into(kbView[i]);
+            }
 
-            Log.e("a2", position + "");
-            Log.e("a3",listsUrl.size()+"");
-            Log.e("a4",listsUrl.get(position-1).getUrls().size()+"");
-
-            if(listsUrl.get(position-1).getUrls().size()!=0) vh.kenBurnsView.initStrings(listsUrl.get(position - 1).getUrls());
-            else vh.kenBurnsView.initResourceIDs(listBasicCover);
+        }else if (listsAlbums.size()>1){
+            for (int i = 0; i < 2; i++) {
+                Glide.with(context).load(listsAlbums.get(i).getCover()).into(kbView[i]);
+            }
 
         }
 
-
-
-
-
     }
+
+
 
     @Override
     public long getItemId(int position) {
@@ -92,14 +84,12 @@ public class MyAdapter_Main extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        return collections.size()+1;
+        return collections.size();
     }
 
 
     @Override
     public int getItemViewType(int position) {
-        if(position==TYPE_HEADER) return TYPE_HEADER;
-        else
             return position;
 
 
@@ -107,35 +97,41 @@ public class MyAdapter_Main extends RecyclerView.Adapter {
     }
 
 
-    public void delete(int position){
 
+    class VH extends RecyclerView.ViewHolder {
 
-        collections.remove(position);
-        notifyItemRemoved(position);
-
-    }
-
-
-    class VH extends RecyclerView.ViewHolder{
-
-        boolean isHeader = headerFlag;
         ImageView btn_add;
-        KenBurnsView kenBurnsView;
+
 
 
         public VH(View itemView) {
             super(itemView);
 
+                mViewSwitcher = itemView.findViewById(R.id.viewSwitcher);
+                kbView[0] = itemView.findViewById(R.id.img1);
+                kbView[1] = itemView.findViewById(R.id.img2);
 
-
-            if(!isHeader){
-                kenBurnsView= itemView.findViewById(R.id.kenburns);
-
-            }else{
                 btn_add= itemView.findViewById(R.id.iv_btnAdd);
 
-            }
+            KenBurnsView.TransitionListener listener = new KenBurnsView.TransitionListener() {
+                @Override
+                public void onTransitionStart(Transition transition) {
+                    mTransitionsCount++;
+                    if (mTransitionsCount == TRANSITIONS_TO_SWITCH) {
+                        mViewSwitcher.showNext();
+                        mTransitionsCount = 0;
+                    }
+                }
 
+                @Override
+                public void onTransitionEnd(Transition transition) {
+
+                }
+            };
+
+            for(int i=0; i<2; i++) {
+                kbView[i].setTransitionListener(listener);
+            }
 
         }
     }

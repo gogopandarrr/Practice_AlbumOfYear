@@ -1,16 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="240dp"
     android:layout_height="280dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_margin="4dp"
-    android:layout_gravity="center">
+    android:layout_gravity="center"
+    app:cardElevation="4dp">
 
-    <com.goka.kenburnsview.KenBurnsView
-        android:id="@+id/kenburns"
+    <ViewSwitcher
+        android:id="@+id/viewSwitcher"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></com.goka.kenburnsview.KenBurnsView>
+        android:layout_height="match_parent"
+        android:inAnimation="@android:anim/fade_in"
+        android:outAnimation="@android:anim/fade_out">
+
+        <com.flaviofaria.kenburnsview.KenBurnsView
+            android:id="@+id/img1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/lp2" />
+
+        <com.flaviofaria.kenburnsview.KenBurnsView
+            android:id="@+id/img2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/lp1" />
 
 
+    </ViewSwitcher>
 
 </android.support.v7.widget.CardView>

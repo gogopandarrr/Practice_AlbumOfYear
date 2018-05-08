@@ -31,14 +31,16 @@ import java.util.ArrayList;
 public class MakeActivity extends AppCompatActivity {
 
     ArrayList<Lists_Album> listsAlbums = new ArrayList<>();
+
     RecyclerView infoRecycle,coverRecycle;
     MyAdapter2 adapter2;
-    MyAdapter adapter;
     SpeedDialView speedDialView;
     SpeedDialOverlayLayout overlayLayout;
     TextView tv_name;
 
-
+    boolean modify;
+    int modiPosition;
+    String modiTitle;
 
 
 
@@ -102,10 +104,10 @@ public class MakeActivity extends AppCompatActivity {
 
         coverRecycle = findViewById(R.id.cover_recycler);
         infoRecycle = findViewById(R.id.info_recycler);
-        adapter = new MyAdapter(this, listsAlbums);
-        adapter2 = new MyAdapter2(this, listsAlbums, adapter, infoRecycle);
+
+        adapter2 = new MyAdapter2(this, listsAlbums, infoRecycle);
         infoRecycle.setAdapter(adapter2);
-        coverRecycle.setAdapter(adapter);
+
         tv_name = findViewById(R.id.tv_nameCollection);
 
 
@@ -129,7 +131,27 @@ public class MakeActivity extends AppCompatActivity {
         coverRecycle.setLayoutManager(layoutManager);
         infoRecycle.setLayoutManager(layoutManager2);
 
-        showTextInputDialog();
+
+
+        Intent data = getIntent();
+
+        modify = data.getBooleanExtra("modify", false);
+        Log.e("boolean", modify+"");
+
+        if(modify){
+            ArrayList<Lists_Album> temp = data.getParcelableArrayListExtra("listAlbums");
+
+            for(int i=0; i<temp.size();i++) {
+                listsAlbums.add(temp.get(i));
+            }
+            modiTitle = data.getStringExtra("nameList");
+            modiPosition = data.getIntExtra("position",0);
+
+            adapter2.notifyDataSetChanged();
+
+        }
+
+//        showTextInputDialog();
     }//oc
 
     private void showTextInputDialog() {
@@ -183,9 +205,17 @@ public class MakeActivity extends AppCompatActivity {
 
     }
 
+
+
+
     public void clickSave(){
 
+
         Intent intent = getIntent();
+        if(modify){
+            intent.putExtra("position",modiPosition);
+
+        }
         intent.putParcelableArrayListExtra("myList",listsAlbums);
         intent.putExtra("nameList",tv_name.getText().toString());
         setResult(RESULT_OK,intent);
@@ -207,17 +237,16 @@ public class MakeActivity extends AppCompatActivity {
                             data.getStringExtra("cover"), data.getStringExtra("artist"),
                             data.getStringExtra("title"), data.getStringExtra("url"), null));
 
-
-
                 }
-
                 break;
+
+
 
 
 
         }//switch
 
-        adapter.notifyDataSetChanged();
+
         adapter2.notifyDataSetChanged();
 
 

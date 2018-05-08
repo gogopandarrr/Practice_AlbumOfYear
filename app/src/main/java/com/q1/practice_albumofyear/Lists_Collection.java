@@ -9,7 +9,7 @@ import java.util.ArrayList;
  * Created by alfo06-07 on 2018-04-30.
  */
 
-public class Lists_Collection  {
+public class Lists_Collection implements Parcelable {
     ArrayList<Lists_Album> listsAlbums;
     String nameList;
 
@@ -34,5 +34,17 @@ public class Lists_Collection  {
 
     public void setNameList(String nameList) {
         this.nameList = nameList;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+
+        parcel.writeTypedList(listsAlbums);
+        parcel.writeString(nameList);
     }
 }

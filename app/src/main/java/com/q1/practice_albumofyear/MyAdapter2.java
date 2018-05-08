@@ -44,10 +44,9 @@ public class MyAdapter2 extends RecyclerView.Adapter {
     private int selectedItem = UNSELECTED;
     VH vh;
 
-    public MyAdapter2(Context context, ArrayList<Lists_Album> listsAlbums, MyAdapter myAdapter, RecyclerView recyclerView) {
+    public MyAdapter2(Context context, ArrayList<Lists_Album> listsAlbums, RecyclerView recyclerView) {
         this.context = context;
         this.listsAlbums = listsAlbums;
-        this.myAdapter = myAdapter;
         this.recyclerView = recyclerView;
 
         res = context.getResources();

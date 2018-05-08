@@ -71,6 +71,7 @@
             android:layout_height="wrap_content"
             android:padding="8dp"
             android:src="@mipmap/btn_edit"
+            android:onClick="clickEdit"
             android:tint="@color/shopSecondary" />
 
         <Space

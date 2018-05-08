@@ -21,19 +21,13 @@ import java.util.ArrayList;
 
 
 
-public class MainActivity extends AppCompatActivity implements DiscreteScrollView.OnItemChangedListener, View.OnClickListener{
-
-    ArrayList<Lists_Url> listsUrl = new ArrayList<>();
-
+public class MainActivity extends AppCompatActivity implements DiscreteScrollView.OnItemChangedListener, View.OnClickListener, DiscreteScrollView.ScrollListener{
 
     ArrayList<Lists_Collection> collections= new ArrayList<>();
     ArrayList<Lists_Album> listsAlbums = new ArrayList<>();
     DiscreteScrollView discreteScrollView;
-    InfiniteScrollAdapter infiniteScrollAdapter;
     TextView title, subTitle;
     MyAdapter_Main adapterMain;
-
-
 
 
 
@@ -48,13 +42,19 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
         discreteScrollView = findViewById(R.id.myCollections);
         discreteScrollView.setOrientation(DSVOrientation.HORIZONTAL);
         discreteScrollView.addOnItemChangedListener(this);
-        adapterMain= new MyAdapter_Main(this, collections, listsUrl);
-
+        adapterMain= new MyAdapter_Main(this, collections);
         discreteScrollView.setAdapter(adapterMain);
         discreteScrollView.setItemTransitionTimeMillis(200);
         discreteScrollView.setItemTransformer(new ScaleTransformer.Builder().setMinScale(0.8f).build());
+        discreteScrollView.setOverScrollEnabled(true);
+        discreteScrollView.setSlideOnFling(true);
+        discreteScrollView.removeItemChangedListener(new DiscreteScrollView.OnItemChangedListener<RecyclerView.ViewHolder>() {
+            @Override
+            public void onCurrentItemChanged(@Nullable RecyclerView.ViewHolder viewHolder, int adapterPosition) {
+                collections.remove(adapterPosition);
 
-
+            }
+        });
 
 
 
@@ -68,19 +68,33 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
 
     }
 
+    public void clickEdit(View v){
+        int position = discreteScrollView.getCurrentItem();
+        boolean modify = true;
+
+        Intent intent = new Intent(this, MakeActivity.class);
+        intent.putParcelableArrayListExtra("listAlbums",collections.get(position).getListsAlbums());
+        intent.putExtra("nameList",collections.get(position).getNameList());
+        intent.putExtra("modify", modify);
+        intent.putExtra("position",position);
+
+        startActivityForResult(intent, 2);
+    }
+
+
+
     public void clickDel(View v){
 
-        infiniteScrollAdapter.notifyDataSetChanged();
-        int position = infiniteScrollAdapter.getRealCurrentPosition();
+        int position = discreteScrollView.getCurrentItem();
 
-        if (position>0){
+        discreteScrollView.setAdapter(null);
+        collections.remove(position);
 
-                collections.remove(position-1);
-            infiniteScrollAdapter.notifyItemRemoved(position);
-        }
-
-
+        adapterMain= new MyAdapter_Main(this, collections);
+        discreteScrollView.setAdapter(adapterMain);
+        if(position>0)  discreteScrollView.smoothScrollToPosition(position-1);
     }
+
 
 
 
@@ -88,6 +102,9 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
 
     @Override
     public void onClick(View view) {
+
+
+
 
     }
 
@@ -99,21 +116,18 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
 
     }
 
+    @Override
+    public void onScroll(float scrollPosition, int currentPosition, int newPosition, @Nullable RecyclerView.ViewHolder currentHolder, @Nullable RecyclerView.ViewHolder newCurrent) {
+
+
+
+    }
 
 
     @Override
     public void onCurrentItemChanged(@Nullable RecyclerView.ViewHolder viewHolder, int adapterPosition) {
 
-//        int position = adapterMain.getRealPosition(adapterPosition);
-//
-//
-//        if(position>0){
-//
-//            onListAdded(collections.get(position-1));
-//
-//
-//        }
-//        else title.setText(R.string.basic_title_make);
+        if(adapterPosition>=0)  onListAdded(collections.get(adapterPosition));
 
 
     }
@@ -126,36 +140,26 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
 
         if(resultCode==RESULT_OK&&requestCode==1){
 
-
-
             listsAlbums = data.getParcelableArrayListExtra("myList");
-
-            ArrayList<String>urls = new ArrayList<>();
-            ArrayList<String>temp = new ArrayList<>();
-
-            for(int i=0;i<listsAlbums.size();i++ ){
-
-                temp.add(listsAlbums.get(i).getCover());
-
-            }
-            Log.e("xxx",temp.size()+"");
-
-            urls.addAll(temp);
-
-            listsUrl.add(new Lists_Url(urls));
-
-            temp.clear();
-
-
 
             collections.add(new Lists_Collection(listsAlbums, data.getStringExtra("nameList")));
 
             adapterMain.notifyItemInserted(collections.size());
 
+        }else if(resultCode==RESULT_OK&&requestCode==2){
 
+            int position = data.getIntExtra("position",0);
+
+            listsAlbums = data.getParcelableArrayListExtra("myList");
+
+            collections.set(position, new Lists_Collection(listsAlbums, data.getStringExtra("nameList")));
+
+            adapterMain.notifyItemChanged(position);
         }
 
 
 
     }
-}//end
+
+
+}
