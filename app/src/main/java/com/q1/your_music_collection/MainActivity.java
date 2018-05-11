@@ -1,9 +1,9 @@
-package com.q1.practice_albumofyear;
+package com.q1.your_music_collection;
 
 
 
-import android.content.ClipData;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,30 +20,37 @@ import com.android.volley.Response;
 import com.android.volley.error.VolleyError;
 import com.android.volley.request.SimpleMultiPartRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.GoogleAuthProvider;
 import com.yarolegovich.discretescrollview.DSVOrientation;
 import com.yarolegovich.discretescrollview.DiscreteScrollView;
-import com.yarolegovich.discretescrollview.InfiniteScrollAdapter;
 import com.yarolegovich.discretescrollview.transform.ScaleTransformer;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 
+import static com.google.android.gms.auth.api.credentials.CredentialPickerConfig.Prompt.SIGN_IN;
 
 
 public class MainActivity extends AppCompatActivity implements DiscreteScrollView.OnItemChangedListener, View.OnClickListener, DiscreteScrollView.ScrollListener{
 
+    private FirebaseAuth mAuth;
+    GoogleApiClient mGoogleApiClient;
     ArrayList<Lists_Collection> collections= new ArrayList<>();
-    ArrayList<Lists_Album> listsAlbums = new ArrayList<>();
+    ArrayList<Lists_Album> listsAlbums= new ArrayList<>();
     DiscreteScrollView discreteScrollView;
     TextView title, subTitle;
     MyAdapter_Main adapterMain;
@@ -58,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
         setContentView(R.layout.activity_scrollview);
 
 
+        mAuth = FirebaseAuth.getInstance();
         title = findViewById(R.id.tv_title_Collection);
         subTitle = findViewById(R.id.tv_subTitle);
         discreteScrollView = findViewById(R.id.myCollections);
@@ -81,11 +88,72 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
 
     }
 
+    private void setGoogleLogin(){
+        FirebaseAuth.getInstance().signOut();
+
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                                                            .requestIdToken("1091521200293-b8kjbla50kdngdcttod92iuqi3i1idt8.apps.googleusercontent.com")
+                                                            .requestEmail()
+                                                            .build();
+
+        mGoogleApiClient = new GoogleApiClient.Builder(this).enableAutoManage(this/* FragmentActivity */,
+                new GoogleApiClient.OnConnectionFailedListener() {
+                    @Override
+                    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+                    }/* OnConnectionFailedListener */
+
+                }).addApi(Auth.GOOGLE_SIGN_IN_API,gso).build();
+    }
+
+    private void loginGoogle(){
+
+        Intent signIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+        startActivityForResult(signIntent, SIGN_IN);
+
+
+    }
+
+    private void firebaseAuthWithGoogle(GoogleSignInAccount acct){
+
+
+        AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+
+
+                        if (!task.isSuccessful()) {
+
+                            Toast.makeText(MainActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+// ...
+                    }
+                });
+
+
+
+
+    }
+
+
     public void clickMake(View v){
 
         Intent intent =  new Intent(this, MakeActivity.class);
 
         startActivityForResult(intent, 1);
+
+    }
+
+    public void clickCommunity(View v){
+
+        Intent intent = new Intent(this, CommunityActivity.class);
+
+
+        startActivityForResult(intent, 30);
+
 
     }
 
@@ -99,7 +167,7 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
         intent.putExtra("modify", modify);
         intent.putExtra("position",position);
 
-        startActivityForResult(intent, 2);
+        startActivityForResult(intent, 20);
     }
 
 
@@ -144,10 +212,9 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
 
         }//for
 
-            obj.put("title",collections.get(position).getNameList());
             obj.put("albumLists",jarray);
 
-            System.out.println(obj.toString());
+
 
         }catch (JSONException e) {
             e.printStackTrace();
@@ -180,8 +247,9 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
 
             }
         });
-
+        String title = collections.get(position).getNameList();
         multiPartRequest.addStringParam("MyJson",obj.toString());
+        multiPartRequest.addStringParam("Title", title);
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
 
@@ -193,118 +261,6 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
     }
 
 
-    public void loadDB(View v){
-
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                String serverUrl = "http://gogopanda.dothome.co.kr/yourCollections/loadDB.php";
-
-                try {
-                    URL url = new URL(serverUrl);
-
-                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                    connection.setDoInput(true);
-                    connection.setUseCaches(false);
-
-                    InputStream is = connection.getInputStream();
-                    InputStreamReader isr = new InputStreamReader(is, "UTF-8");
-                    BufferedReader reader = new BufferedReader(isr);
-
-                    StringBuilder sb = new StringBuilder();
-
-
-                    while(true){
-                        String line = reader.readLine();
-
-                        if(line==null) break;
-
-                        sb.append(line);
-
-
-                    }
-
-                    reader.close();
-                    connection.disconnect();
-
-
-                    String result = sb.toString();
-                    jsonParser(result);
-
-
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-
-                }
-
-
-            }
-        });
-
-        thread.start();
-
-    }
-
-
-    public void jsonParser(String jsonString){
-
-
-        if(jsonString==null) return;
-
-
-        try {
-            JSONObject jsonObject = new JSONObject(jsonString);
-
-            System.out.println(jsonObject.toString());
-            collections.clear();
-
-
-                String title = jsonObject.getString("title");
-
-
-                ArrayList<Lists_Album> listsAlbum = new ArrayList<>();
-                JSONArray albumsInfos = jsonObject.getJSONArray("albumLists");
-
-
-                    for(int k=0; k< albumsInfos.length(); k++) {
-
-                        JSONObject albumInfo = albumsInfos.getJSONObject(k);
-
-                        String artist = albumInfo.getString("artist");
-                        String album = albumInfo.getString("album");
-                        String cover = albumInfo.getString("cover");
-                        int rank = albumInfo.getInt("rank");
-                        String opinion = albumInfo.getString("opinion");
-                        String info = albumInfo.getString("info");
-
-                        listsAlbum.add(new Lists_Album(rank, cover, artist, album, info, opinion));
-
-                    }
-
-                    collections.add(new Lists_Collection(listsAlbum, title));
-
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        adapterMain.notifyDataSetChanged();
-                    }
-                });
-
-
-        } catch (JSONException e) {
-
-            Log.e("Exception", e.getMessage());
-
-
-        }
-
-
-
-
-    }
 
 
 
@@ -347,7 +303,7 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
 
             adapterMain.notifyItemInserted(collections.size());
 
-        }else if(resultCode==RESULT_OK&&requestCode==2){
+        }else if(resultCode==RESULT_OK&&requestCode==20){
 
             int position = data.getIntExtra("position",0);
 
@@ -356,7 +312,32 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
             collections.set(position, new Lists_Collection(listsAlbums, data.getStringExtra("nameList")));
 
             adapterMain.notifyItemChanged(position);
-        }
+        }else if(requestCode == SIGN_IN){
+
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+
+            if(result!=null){
+
+                if(result.isSuccess()){
+
+                    GoogleSignInAccount acct = result.getSignInAccount();
+
+
+                    String personName = acct.getDisplayName();
+                    String personEmail = acct.getEmail();
+                    String personId = acct.getId();
+                    String tokenKey = acct.getServerAuthCode();
+
+                    mGoogleApiClient.disconnect();
+
+                }else {
+
+                    Log.e("GoogleLogin", "login fail cause=" + result.getStatus().getStatusMessage());
+                }
+            }
+
+
+        }//else if
 
 
 

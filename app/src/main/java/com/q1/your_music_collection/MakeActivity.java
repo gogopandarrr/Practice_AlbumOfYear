@@ -1,4 +1,4 @@
-package com.q1.practice_albumofyear;
+package com.q1.your_music_collection;
 
 import android.content.Context;
 import android.content.Intent;
@@ -17,7 +17,6 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.ViewSwitcher;
 
 
 import com.leinardi.android.speeddial.SpeedDialActionItem;

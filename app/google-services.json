@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1055868238624",
+    "firebase_url": "https://youralbumcollection.firebaseio.com",
+    "project_id": "youralbumcollection",
+    "storage_bucket": "youralbumcollection.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1055868238624:android:dccc41b69a0f4f7b",
+        "android_client_info": {
+          "package_name": "com.q1.your_music_collection"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1055868238624-bhrgse1a1emeanfeo1rb9fp0pr553hp2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.q1.your_music_collection",
+            "certificate_hash": "7b4ba21c6dc3a1f5f213a9ed1b1ff504cdccde57"
+          }
+        },
+        {
+          "client_id": "1055868238624-1er5o4dcbov0748uh8i7pdg7rsmavdmc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBncnvZYjZ9Ab9luDstSBmjBIo8PJ05G-c"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1055868238624-1er5o4dcbov0748uh8i7pdg7rsmavdmc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

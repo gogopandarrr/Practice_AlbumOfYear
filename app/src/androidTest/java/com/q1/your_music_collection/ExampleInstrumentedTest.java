@@ -1,4 +1,4 @@
-package com.q1.practice_albumofyear;
+package com.q1.your_music_collection;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.q1.practice_albumofyear", appContext.getPackageName());
+        assertEquals("com.q1.your_music_collection", appContext.getPackageName());
     }
 }

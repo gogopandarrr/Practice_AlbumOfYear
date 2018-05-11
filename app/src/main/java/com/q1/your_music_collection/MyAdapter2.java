@@ -1,10 +1,9 @@
-package com.q1.practice_albumofyear;
+package com.q1.your_music_collection;
 
 import android.content.Context;
 import android.content.res.Resources;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,8 +11,6 @@ import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
@@ -95,7 +92,6 @@ public class MyAdapter2 extends RecyclerView.Adapter {
     public void delete(int position){
 
         listsAlbums.remove(position);
-        myAdapter.notifyItemRemoved(position);
         notifyItemRemoved(position);
 
     }
@@ -215,8 +211,8 @@ public class MyAdapter2 extends RecyclerView.Adapter {
                             if(!hasFocus) {
 
                                 comment.setAutoLinkText(ev_comment.getText().toString());
-                                listsAlbum.setOpinion(comment.getText().toString());
                                 switcherC.showNext();
+                                listsAlbum.setOpinion(comment.getText().toString());
 
                             }
                         }

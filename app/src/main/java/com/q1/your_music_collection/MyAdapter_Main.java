@@ -1,9 +1,7 @@
-package com.q1.practice_albumofyear;
+package com.q1.your_music_collection;
 
 import android.content.Context;
-import android.support.transition.TransitionManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +12,6 @@ import android.widget.ViewSwitcher;
 
 import com.bumptech.glide.Glide;
 import com.flaviofaria.kenburnsview.KenBurnsView;
-import com.flaviofaria.kenburnsview.RandomTransitionGenerator;
 import com.flaviofaria.kenburnsview.Transition;
 
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package com.q1.practice_albumofyear;
+package com.q1.your_music_collection;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -19,6 +19,23 @@ public class Lists_Collection implements Parcelable {
         this.nameList = nameList;
     }
 
+
+    protected Lists_Collection(Parcel in) {
+        listsAlbums = in.createTypedArrayList(Lists_Album.CREATOR);
+        nameList = in.readString();
+    }
+
+    public static final Creator<Lists_Collection> CREATOR = new Creator<Lists_Collection>() {
+        @Override
+        public Lists_Collection createFromParcel(Parcel in) {
+            return new Lists_Collection(in);
+        }
+
+        @Override
+        public Lists_Collection[] newArray(int size) {
+            return new Lists_Collection[size];
+        }
+    };
 
     public ArrayList<Lists_Album> getListsAlbums() {
         return listsAlbums;

@@ -1,4 +1,4 @@
-package com.q1.practice_albumofyear;
+package com.q1.your_music_collection;
 
 import org.junit.Test;
 

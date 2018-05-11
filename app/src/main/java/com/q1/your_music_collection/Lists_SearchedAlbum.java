@@ -1,4 +1,4 @@
-package com.q1.practice_albumofyear;
+package com.q1.your_music_collection;
 
 /**
  * Created by alfo06-07 on 2018-04-11.
