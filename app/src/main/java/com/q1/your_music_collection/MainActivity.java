@@ -21,11 +21,6 @@ import com.android.volley.Response;
 import com.android.volley.error.VolleyError;
 import com.android.volley.request.SimpleMultiPartRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.yarolegovich.discretescrollview.DSVOrientation;
 import com.yarolegovich.discretescrollview.DiscreteScrollView;
 import com.yarolegovich.discretescrollview.transform.ScaleTransformer;
@@ -58,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
 
 
         tinyDB = new TinyDB(this);
+
         userId = findViewById(R.id.userId);
         title = findViewById(R.id.tv_title_Collection);
         subTitle = findViewById(R.id.tv_subTitle);
@@ -74,6 +70,7 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
             @Override
             public void onCurrentItemChanged(@Nullable RecyclerView.ViewHolder viewHolder, int adapterPosition) {
                 collections.remove(adapterPosition);
+
 
 
             }
@@ -234,7 +231,7 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
         Log.e("a1", stp.size()+"");
 
     }
-    public void  loadToPhone(View v){
+    public void  loadToPhone(){
 
     stp = tinyDB.getListObject("collection",Lists_Collection.class);
 
@@ -279,11 +276,16 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
 
     }
 
-
+    @Override
+    protected void onStart() {
+        super.onStart();
+        loadToPhone();
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
 
         if(resultCode==RESULT_OK&&requestCode==1){
 

@@ -37,6 +37,7 @@ public class MakeActivity extends AppCompatActivity {
     SpeedDialOverlayLayout overlayLayout;
     TextView tv_name;
 
+
     boolean modify;
     int modiPosition;
     String modiTitle;
@@ -103,6 +104,7 @@ public class MakeActivity extends AppCompatActivity {
 
         coverRecycle = findViewById(R.id.cover_recycler);
         infoRecycle = findViewById(R.id.info_recycler);
+        infoRecycle.setHasFixedSize(false);
 
         adapter2 = new MyAdapter2(this, listsAlbums, infoRecycle);
         infoRecycle.setAdapter(adapter2);
