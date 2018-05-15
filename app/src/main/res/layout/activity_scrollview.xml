@@ -5,16 +5,34 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <ImageView
-        android:id="@+id/home"
-        style="@style/ClickableImageView"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_gravity="start"
-        android:layout_margin="8dp"
-        android:padding="8dp"
-        android:src="@drawable/ic_back" />
+
+        <ImageView
+            android:id="@+id/home"
+            style="@style/ClickableImageView"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="start"
+            android:layout_margin="16dp"
+            android:padding="8dp"
+            android:src="@drawable/ic_back"
+            android:onClick="loadToPhone"
+            />
+
+        <TextView
+            android:id="@+id/userId"
+            android:layout_margin="24dp"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sign In"
+            android:onClick="login"
+            />
+    </RelativeLayout>
+
 
     <Space
         android:layout_width="wrap_content"

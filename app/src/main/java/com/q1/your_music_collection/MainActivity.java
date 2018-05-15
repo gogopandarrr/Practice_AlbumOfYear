@@ -3,6 +3,7 @@ package com.q1.your_music_collection;
 
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
@@ -21,40 +22,32 @@ import com.android.volley.error.VolleyError;
 import com.android.volley.request.SimpleMultiPartRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.auth.FirebaseUser;
 import com.yarolegovich.discretescrollview.DSVOrientation;
 import com.yarolegovich.discretescrollview.DiscreteScrollView;
 import com.yarolegovich.discretescrollview.transform.ScaleTransformer;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
-
-import static com.google.android.gms.auth.api.credentials.CredentialPickerConfig.Prompt.SIGN_IN;
 
 
 public class MainActivity extends AppCompatActivity implements DiscreteScrollView.OnItemChangedListener, View.OnClickListener, DiscreteScrollView.ScrollListener{
 
-    private FirebaseAuth mAuth;
-    GoogleApiClient mGoogleApiClient;
+
     ArrayList<Lists_Collection> collections= new ArrayList<>();
     ArrayList<Lists_Album> listsAlbums= new ArrayList<>();
     DiscreteScrollView discreteScrollView;
-    TextView title, subTitle;
+    TextView title, subTitle, userId;
     MyAdapter_Main adapterMain;
     JSONObject obj;
+    TinyDB tinyDB;
+    ArrayList<Object> stp;
+
+
 
 
 
@@ -64,7 +57,8 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
         setContentView(R.layout.activity_scrollview);
 
 
-        mAuth = FirebaseAuth.getInstance();
+        tinyDB = new TinyDB(this);
+        userId = findViewById(R.id.userId);
         title = findViewById(R.id.tv_title_Collection);
         subTitle = findViewById(R.id.tv_subTitle);
         discreteScrollView = findViewById(R.id.myCollections);
@@ -81,6 +75,7 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
             public void onCurrentItemChanged(@Nullable RecyclerView.ViewHolder viewHolder, int adapterPosition) {
                 collections.remove(adapterPosition);
 
+
             }
         });
 
@@ -88,61 +83,18 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
 
     }
 
-    private void setGoogleLogin(){
-        FirebaseAuth.getInstance().signOut();
+    public void login(View v){
 
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                                                            .requestIdToken("1091521200293-b8kjbla50kdngdcttod92iuqi3i1idt8.apps.googleusercontent.com")
-                                                            .requestEmail()
-                                                            .build();
-
-        mGoogleApiClient = new GoogleApiClient.Builder(this).enableAutoManage(this/* FragmentActivity */,
-                new GoogleApiClient.OnConnectionFailedListener() {
-                    @Override
-                    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-                    }/* OnConnectionFailedListener */
-
-                }).addApi(Auth.GOOGLE_SIGN_IN_API,gso).build();
-    }
-
-    private void loginGoogle(){
-
-        Intent signIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-        startActivityForResult(signIntent, SIGN_IN);
-
-
-    }
-
-    private void firebaseAuthWithGoogle(GoogleSignInAccount acct){
-
-
-        AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
-        mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-
-
-                        if (!task.isSuccessful()) {
-
-                            Toast.makeText(MainActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-// ...
-                    }
-                });
-
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivityForResult(intent, 0);
 
 
 
     }
-
 
     public void clickMake(View v){
 
         Intent intent =  new Intent(this, MakeActivity.class);
-
         startActivityForResult(intent, 1);
 
     }
@@ -150,7 +102,6 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
     public void clickCommunity(View v){
 
         Intent intent = new Intent(this, CommunityActivity.class);
-
 
         startActivityForResult(intent, 30);
 
@@ -182,6 +133,8 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
         adapterMain= new MyAdapter_Main(this, collections);
         discreteScrollView.setAdapter(adapterMain);
         if(position>0)  discreteScrollView.smoothScrollToPosition(position-1);
+
+        saveToPhone();
     }
 
 
@@ -261,7 +214,44 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
     }
 
 
+    public void saveToPhone(){
 
+        stp = new ArrayList<>();
+        for(Lists_Collection a : collections){
+
+            stp.add(a);
+
+        }
+
+        tinyDB.putListObject("collection",stp);
+
+        tinyDB.registerOnSharedPreferenceChangeListener(new SharedPreferences.OnSharedPreferenceChangeListener() {
+            @Override
+            public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
+
+            }
+        });
+        Log.e("a1", stp.size()+"");
+
+    }
+    public void  loadToPhone(View v){
+
+    stp = tinyDB.getListObject("collection",Lists_Collection.class);
+
+    collections.clear();
+
+    for (Object objs : stp){
+
+        collections.add((Lists_Collection)objs);
+
+    }
+
+        Log.e("a2", collections.size()+"");
+
+        adapterMain.notifyDataSetChanged();
+
+
+    }
 
 
 
@@ -303,6 +293,8 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
 
             adapterMain.notifyItemInserted(collections.size());
 
+
+
         }else if(resultCode==RESULT_OK&&requestCode==20){
 
             int position = data.getIntExtra("position",0);
@@ -312,36 +304,26 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
             collections.set(position, new Lists_Collection(listsAlbums, data.getStringExtra("nameList")));
 
             adapterMain.notifyItemChanged(position);
-        }else if(requestCode == SIGN_IN){
 
-            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+        }else if(resultCode==RESULT_OK&&requestCode==0){
 
-            if(result!=null){
-
-                if(result.isSuccess()){
-
-                    GoogleSignInAccount acct = result.getSignInAccount();
+            String id = data.getStringExtra("userId");
 
 
-                    String personName = acct.getDisplayName();
-                    String personEmail = acct.getEmail();
-                    String personId = acct.getId();
-                    String tokenKey = acct.getServerAuthCode();
-
-                    mGoogleApiClient.disconnect();
-
-                }else {
-
-                    Log.e("GoogleLogin", "login fail cause=" + result.getStatus().getStatusMessage());
-                }
-            }
+            userId.setText(id);
 
 
-        }//else if
+
+        }
+
+        saveToPhone();
+
+
+    }
+
 
 
 
     }
 
 
-}

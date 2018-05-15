@@ -1,154 +1,201 @@
 package com.q1.your_music_collection;
 
 import android.content.Intent;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.SignInButton;
-import com.google.android.gms.common.api.GoogleApiClient;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthCredential;
-
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.GoogleAuthProvider;
-
-public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
-
-    FirebaseUser mFirebaseUser;
-    FirebaseAuth mFirebaseAuth;
-    FirebaseAuth.AuthStateListener mFirebaseAuthListener;
-
-    GoogleApiClient mGoogleApiClient;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 
+import com.facebook.FacebookSdk;
+import com.facebook.LoggingBehavior;
 
-    static final String TAG = LoginActivity.class.getName();
-    static final int RC_GOOGLE_SIGN_IN = 9001;
+import studios.codelight.smartloginlibrary.LoginType;
+import studios.codelight.smartloginlibrary.SmartLogin;
+import studios.codelight.smartloginlibrary.SmartLoginConfig;
+import studios.codelight.smartloginlibrary.SmartLoginFactory;
+import studios.codelight.smartloginlibrary.UserSessionManager;
+import studios.codelight.smartloginlibrary.users.SmartFacebookUser;
+import studios.codelight.smartloginlibrary.users.SmartGoogleUser;
+import studios.codelight.smartloginlibrary.users.SmartUser;
+import studios.codelight.smartloginlibrary.util.SmartLoginException;
 
+public class LoginActivity extends AppCompatActivity {
+
+    private Button facebookLoginButton, googleLoginButton, customSigninButton, customSignupButton, logoutButton;
+    private EditText emailEditText, passwordEditText;
+    SmartUser currentUser;
+    //GoogleApiClient mGoogleApiClient;
+    SmartLoginConfig config;
+    SmartLogin smartLogin;
+
+    String userId;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FacebookSdk.setApplicationId(getString(R.string.facebook_app_id));
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        if (BuildConfig.DEBUG) {
+            FacebookSdk.setIsDebugEnabled(true);
+            FacebookSdk.addLoggingBehavior(LoggingBehavior.INCLUDE_ACCESS_TOKENS);
+        }
         setContentView(R.layout.activity_login);
 
-        mFirebaseAuth = FirebaseAuth.getInstance();
-
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken("1055868238624-bhrgse1a1emeanfeo1rb9fp0pr553hp2.apps.googleusercontent.com")
-                .requestEmail()
-                .build();
-
-        mGoogleApiClient = new GoogleApiClient.Builder(this).enableAutoManage(this, this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API,gso).build();
+        bindViews();
+        setListeners();
 
 
 
-        mFirebaseAuthListener = new FirebaseAuth.AuthStateListener() {
+        config = new SmartLoginConfig(this, new studios.codelight.smartloginlibrary.SmartLoginCallbacks() {
             @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+            public void onLoginSuccess(SmartUser user) {
 
-                mFirebaseUser = mFirebaseAuth.getCurrentUser();
-                if ( mFirebaseUser != null ) {
-
-                    Log.d(TAG, "sign in");
-
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    startActivity(intent);
-                    finish();
-
-                }else Log.d(TAG, "sign out");
+                Toast.makeText(LoginActivity.this, user.toString(), Toast.LENGTH_SHORT).show();
+                refreshLayout();
             }
-        };
 
-
-
-
-        SignInButton signInButton = findViewById(R.id.google_login_button);
-        signInButton.setSize(SignInButton.SIZE_STANDARD);
-        signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Intent signIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-                startActivityForResult(signIntent, RC_GOOGLE_SIGN_IN);
+            public void onLoginFailure(SmartLoginException e) {
+                Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public SmartUser doCustomLogin() {
+                SmartUser user = new SmartUser();
+                user.setEmail(emailEditText.getText().toString());
+                return user;
+            }
+
+            @Override
+            public SmartUser doCustomSignup() {
+                SmartUser user = new SmartUser();
+                user.setEmail(emailEditText.getText().toString());
+                return user;
             }
         });
-
+        config.setFacebookAppId(getString(R.string.facebook_app_id));
+        config.setFacebookPermissions(null);
+        config.setGoogleApiClient(null);
 
 
     }
+    private void bindViews() {
+        facebookLoginButton = (Button) findViewById(R.id.facebook_login_button);
+        googleLoginButton = (Button) findViewById(R.id.google_login_button);
+        customSigninButton = (Button) findViewById(R.id.custom_signin_button);
+        customSignupButton = (Button) findViewById(R.id.custom_signup_button);
+        emailEditText = (EditText) findViewById(R.id.email_edittext);
+        passwordEditText = (EditText) findViewById(R.id.password_edittext);
+        logoutButton = (Button) findViewById(R.id.logout_button);
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        currentUser = UserSessionManager.getCurrentUser(this);
+        refreshLayout();
+    }
+
+    private void refreshLayout() {
+        currentUser = UserSessionManager.getCurrentUser(this);
+        if (currentUser != null) {
+            Log.d("Smart Login", "Logged in user: " + currentUser.toString());
+
+
+            userId = currentUser.getUserId();
+
+            Intent intent = getIntent();
+
+            intent.putExtra("userId", userId);
+            setResult(RESULT_OK, intent);
+            finish();
+
+
+        } else {
+            facebookLoginButton.setVisibility(View.VISIBLE);
+            googleLoginButton.setVisibility(View.VISIBLE);
+            customSigninButton.setVisibility(View.VISIBLE);
+            customSignupButton.setVisibility(View.VISIBLE);
+            emailEditText.setVisibility(View.VISIBLE);
+            passwordEditText.setVisibility(View.VISIBLE);
+            logoutButton.setVisibility(View.GONE);
+        }
+    }
 
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == RC_GOOGLE_SIGN_IN){
+        super.onActivityResult(requestCode, resultCode, data);
+        if (smartLogin != null) {
+            smartLogin.onActivityResult(requestCode, resultCode, data, config);
+        }
+    }
 
-               GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+    private void setListeners() {
+        facebookLoginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Perform Facebook login
+                smartLogin = SmartLoginFactory.build(LoginType.Facebook);
+                smartLogin.login(config);
+            }
+        });
 
+        googleLoginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Perform Google login
+                smartLogin = SmartLoginFactory.build(LoginType.Google);
+                smartLogin.login(config);
+            }
+        });
 
-                if (result.isSuccess()) {
+        customSigninButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Perform custom sign in
+                smartLogin = SmartLoginFactory.build(LoginType.CustomLogin);
+                smartLogin.login(config);
+            }
+        });
 
-                    GoogleSignInAccount acct = result.getSignInAccount();
+        customSignupButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Perform custom sign up
+                smartLogin = SmartLoginFactory.build(LoginType.CustomLogin);
+                smartLogin.signup(config);
+            }
+        });
 
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (currentUser != null) {
+                    if (currentUser instanceof SmartFacebookUser) {
+                        smartLogin = SmartLoginFactory.build(LoginType.Facebook);
 
-                    String personName = acct.getDisplayName();
-                    String personEmail = acct.getEmail();
-                    String personId = acct.getId();
-                    String tokenKey = acct.getServerAuthCode();
-
-                    AuthCredential credential = GoogleAuthProvider.getCredential(tokenKey, null);
-                    mFirebaseAuth.signInWithCredential(credential).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                            startActivity(intent);
-                            finish();
-                        }
-                    });
-
-                } else {
-
-                    Log.e("GoogleLogin", "login fail cause=" + result.getStatus().getStatusMessage());
+                    } else if(currentUser instanceof SmartGoogleUser) {
+                        smartLogin = SmartLoginFactory.build(LoginType.Google);
+                    } else {
+                        smartLogin = SmartLoginFactory.build(LoginType.CustomLogin);
+                    }
+                    boolean result = smartLogin.logout(LoginActivity.this);
+                    if (result) {
+                        refreshLayout();
+                        Toast.makeText(LoginActivity.this, "User logged out successfully", Toast.LENGTH_SHORT).show();
+                    }
                 }
-
-
-
-
-    }//if
-
+            }
+        });
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        mFirebaseAuth.addAuthStateListener(mFirebaseAuthListener);
-    }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        mFirebaseAuth.removeAuthStateListener(mFirebaseAuthListener);
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-        Log.d(TAG, "onConnectionFailed:" + connectionResult);
-    }
 }
