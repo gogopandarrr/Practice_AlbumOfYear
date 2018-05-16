@@ -1,6 +1,7 @@
 package com.q1.your_music_collection;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Rect;
@@ -144,8 +145,8 @@ public class MakeActivity extends AppCompatActivity {
 
         Intent data = getIntent();
 
+
         modify = data.getBooleanExtra("modify", false);
-        Log.e("boolean", modify+"");
 
         if(modify){
             ArrayList<Lists_Album> temp = data.getParcelableArrayListExtra("listAlbums");
@@ -154,13 +155,15 @@ public class MakeActivity extends AppCompatActivity {
                 listsAlbums.add(temp.get(i));
             }
             modiTitle = data.getStringExtra("nameList");
+            tv_name.setText(modiTitle);
             modiPosition = data.getIntExtra("position",0);
 
             adapter2.notifyDataSetChanged();
 
-        }
+        }else showTextInputDialog();
 
-//        showTextInputDialog();
+
+
     }//oc
 
     private void showTextInputDialog() {
@@ -173,8 +176,12 @@ public class MakeActivity extends AppCompatActivity {
                     public void onTextInputConfirmed(String text) {
                         tv_name.setText(text);
                     }})
-                .setNegativeButton(android.R.string.no, null)
-                .show();
+                .setNegativeButton(android.R.string.no, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        finish();
+                    }
+                }).show();
     }
 
 
