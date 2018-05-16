@@ -23,10 +23,10 @@
             android:name=".MakeActivity"
             android:label="@string/title_activity_make"
             android:theme="@style/AppTheme" />
-        <activity android:name=".LoginActivity"/>
-        <activity android:name=".SearchActivity"/>
-        <activity android:name=".CommunityActivity"/>
-
+        <activity android:name=".LoginActivity" />
+        <activity android:name=".SearchActivity" />
+        <activity android:name=".CommunityActivity" />
+        <activity android:name=".webView.BrowserActivity"></activity>
     </application>
 
 </manifest>

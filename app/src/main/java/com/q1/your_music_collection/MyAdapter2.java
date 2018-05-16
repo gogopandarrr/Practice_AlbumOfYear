@@ -1,9 +1,11 @@
 package com.q1.your_music_collection;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,13 +19,12 @@ import android.widget.ViewSwitcher;
 
 import com.bumptech.glide.Glide;
 import com.h6ah4i.android.widget.advrecyclerview.draggable.DraggableItemAdapter;
-import com.h6ah4i.android.widget.advrecyclerview.draggable.DraggableItemConstants;
 import com.h6ah4i.android.widget.advrecyclerview.draggable.ItemDraggableRange;
 import com.h6ah4i.android.widget.advrecyclerview.utils.AbstractDraggableItemViewHolder;
 import com.hsalf.smilerating.SmileRating;
 import com.luseen.autolinklibrary.AutoLinkMode;
 import com.luseen.autolinklibrary.AutoLinkTextView;
-
+import com.q1.your_music_collection.webView.BrowserActivity;
 
 
 import net.cachapa.expandablelayout.ExpandableLayout;
@@ -36,7 +37,6 @@ import java.util.ArrayList;
 
 public class MyAdapter2 extends RecyclerView.Adapter implements DraggableItemAdapter {
 
-    MyAdapter myAdapter;
     Context context;
     ArrayList<Lists_Album> listsAlbums;
     Lists_Album listsAlbum;
@@ -45,6 +45,12 @@ public class MyAdapter2 extends RecyclerView.Adapter implements DraggableItemAda
     private static final int UNSELECTED = -1;
     private int selectedItem = UNSELECTED;
     VH vh;
+
+    public static final int MODE_DEFAULT = 0;
+    public static final int MODE_SONIC = 1;
+    public static final int MODE_SONIC_WITH_OFFLINE_CACHE = 2;
+    private static final int PERMISSION_REQUEST_CODE_STORAGE = 1;
+    private String url;
 
 
 
@@ -85,8 +91,10 @@ public class MyAdapter2 extends RecyclerView.Adapter implements DraggableItemAda
 
             vh.artist.setText(listsAlbum.artist);
             vh.title.setText(listsAlbum.album);
-            Glide.with(context).load(listsAlbum.cover).into(vh.cover);
 
+
+            Glide.with(context).load(listsAlbum.cover).into(vh.cover);
+            Glide.with(context).load(listsAlbum.getRankImg()).into(vh.rank);
 
     }
 
@@ -151,7 +159,7 @@ public class MyAdapter2 extends RecyclerView.Adapter implements DraggableItemAda
         CardView info_card;
         TextView artist, title;
         SmileRating smileRating;
-        ImageView bt_delete;
+        ImageView bt_delete, bt_url;
         ViewSwitcher switcherT, switcherC;
         AutoLinkTextView comment;
         EditText ev_title, ev_comment;
@@ -160,10 +168,10 @@ public class MyAdapter2 extends RecyclerView.Adapter implements DraggableItemAda
 
 
 
-        public VH(View itemView) {
+        public VH(final View itemView) {
             super(itemView);
 
-
+            bt_url = itemView.findViewById(R.id.btn_url);
             rank= itemView.findViewById(R.id.rank);
             cover= itemView.findViewById(R.id.cover);
             smileRating = itemView.findViewById(R.id.smile_rating);
@@ -277,9 +285,8 @@ public class MyAdapter2 extends RecyclerView.Adapter implements DraggableItemAda
                 public void onSmileySelected(int smiley, boolean reselected) {
 
                     int position = getAdapterPosition();
+
                     VH holder= (VH) recyclerView.findViewHolderForAdapterPosition(position);
-
-
 
                     switch (smiley){
 
@@ -326,8 +333,26 @@ public class MyAdapter2 extends RecyclerView.Adapter implements DraggableItemAda
                 }
             });
 
+            bt_url.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    url = listsAlbums.get(getAdapterPosition()).getUrl();
+                    vh.startBrowserActivity(MODE_SONIC);
+                }
+            });
+
+
         }
 
+        private void startBrowserActivity(int mode) {
+
+
+            Intent intent = new Intent(context, BrowserActivity.class);
+            intent.putExtra(BrowserActivity.PARAM_URL, url);
+            intent.putExtra(BrowserActivity.PARAM_MODE, mode);
+            context.startActivity(intent);
+        }
 
     }//vh.class
 

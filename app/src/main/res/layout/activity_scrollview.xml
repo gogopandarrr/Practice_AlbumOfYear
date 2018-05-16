@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:gradient="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/tools"
     android:orientation="vertical">
     <com.dynamitechetan.flowinggradient.FlowingGradient
         android:layout_width="match_parent"
@@ -72,9 +72,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:textColor="@color/shopAccent"
+        android:textColor="@color/material_teal_900"
         android:textStyle="bold"
-        android:text="2018 May (25 album)" />
+        android:text="how many album" />
 
     <Space
         android:layout_width="wrap_content"
@@ -91,7 +91,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="100dp"
         android:gravity="center"
         android:orientation="horizontal">
 
@@ -113,9 +113,13 @@
             android:id="@+id/item_btn_make"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_listen"
-            android:tint="@android:color/white"
+            android:src="@drawable/ic_new"
+            android:tint="@color/material_blue_050"
             android:onClick="clickMake"
+            gradient:backgroundTint="@color/material_orange_a200"
+            android:elevation="10dp"
+            gradient:borderWidth="2dp"
+
             />
 
         <Space
@@ -151,7 +155,7 @@
             android:text="upload"
             android:onClick="clickUpload"
             android:textAllCaps="true"
-            android:textColor="@color/shopAccent" />
+            android:textColor="@color/material_orange_900" />
 
         <Button
             android:id="@+id/btn_community"
@@ -162,7 +166,7 @@
             android:layout_weight="1"
             android:text="Community"
             android:textAllCaps="true"
-            android:textColor="@color/shopAccent" />
+            android:textColor="@color/material_orange_900" />
 
     </LinearLayout>
 

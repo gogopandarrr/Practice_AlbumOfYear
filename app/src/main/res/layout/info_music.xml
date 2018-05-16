@@ -118,6 +118,7 @@
                 android:src="@mipmap/btn_edit" />
 
             <ImageView
+                android:id="@+id/btn_url"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_marginLeft="4dp"

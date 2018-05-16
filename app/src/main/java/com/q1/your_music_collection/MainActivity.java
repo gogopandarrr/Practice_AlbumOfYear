@@ -2,9 +2,9 @@ package com.q1.your_music_collection;
 
 
 
+
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -124,14 +124,22 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
 
         int position = discreteScrollView.getCurrentItem();
 
-        discreteScrollView.setAdapter(null);
         collections.remove(position);
 
-        adapterMain= new MyAdapter_Main(this, collections);
-        discreteScrollView.setAdapter(adapterMain);
+        refresh();
+
         if(position>0)  discreteScrollView.smoothScrollToPosition(position-1);
 
         saveToPhone();
+    }
+
+    public void refresh(){
+
+        discreteScrollView.setAdapter(null);
+        adapterMain= new MyAdapter_Main(this, collections);
+        discreteScrollView.setAdapter(adapterMain);
+
+
     }
 
 
@@ -228,7 +236,6 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
 
             }
         });
-        Log.e("a1", stp.size()+"");
 
     }
     public void  loadToPhone(){
@@ -243,15 +250,19 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
 
     }
 
-        Log.e("a2", collections.size()+"");
 
         adapterMain.notifyDataSetChanged();
 
 
     }
 
-
-
+    @Override
+    protected void onResume() {
+        int position = discreteScrollView.getCurrentItem();
+        refresh();
+        discreteScrollView.smoothScrollToPosition(position);
+        super.onResume();
+    }
 
     @Override
     public void onClick(View view) {
@@ -271,7 +282,14 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
     @Override
     public void onCurrentItemChanged(@Nullable RecyclerView.ViewHolder viewHolder, int adapterPosition) {
 
-        if(adapterPosition>=0)  title.setText(collections.get(adapterPosition).getNameList());
+        if(adapterPosition>=0){
+
+            title.setText(collections.get(adapterPosition).getNameList());
+            subTitle.setText("Total "+collections.get(adapterPosition).getListsAlbums().size()+" albums");
+        }else{
+            title.setText("make your Collection");
+            subTitle.setText("▼");
+        }
 
 
     }
@@ -295,7 +313,7 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
 
             adapterMain.notifyItemInserted(collections.size());
 
-            discreteScrollView.smoothScrollToPosition(collections.size()-1);
+            if(collections.size()>1) discreteScrollView.smoothScrollToPosition(collections.size()-1);
 
 
 
@@ -307,11 +325,7 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
 
             collections.set(position, new Lists_Collection(listsAlbums, data.getStringExtra("nameList")));
 
-            discreteScrollView.setAdapter(null);
-
-            adapterMain= new MyAdapter_Main(this, collections);
-
-            discreteScrollView.setAdapter(adapterMain);
+            refresh();
 
             discreteScrollView.smoothScrollToPosition(position);
 
