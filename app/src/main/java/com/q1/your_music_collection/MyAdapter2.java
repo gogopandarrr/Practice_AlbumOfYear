@@ -16,9 +16,14 @@ import android.widget.ViewSwitcher;
 
 
 import com.bumptech.glide.Glide;
+import com.h6ah4i.android.widget.advrecyclerview.draggable.DraggableItemAdapter;
+import com.h6ah4i.android.widget.advrecyclerview.draggable.DraggableItemConstants;
+import com.h6ah4i.android.widget.advrecyclerview.draggable.ItemDraggableRange;
+import com.h6ah4i.android.widget.advrecyclerview.utils.AbstractDraggableItemViewHolder;
 import com.hsalf.smilerating.SmileRating;
 import com.luseen.autolinklibrary.AutoLinkMode;
 import com.luseen.autolinklibrary.AutoLinkTextView;
+
 
 
 import net.cachapa.expandablelayout.ExpandableLayout;
@@ -29,7 +34,7 @@ import java.util.ArrayList;
  * Created by alfo06-07 on 2018-03-21.
  */
 
-public class MyAdapter2 extends RecyclerView.Adapter {
+public class MyAdapter2 extends RecyclerView.Adapter implements DraggableItemAdapter {
 
     MyAdapter myAdapter;
     Context context;
@@ -41,10 +46,15 @@ public class MyAdapter2 extends RecyclerView.Adapter {
     private int selectedItem = UNSELECTED;
     VH vh;
 
+
+
+
     public MyAdapter2(Context context, ArrayList<Lists_Album> listsAlbums, RecyclerView recyclerView) {
         this.context = context;
         this.listsAlbums = listsAlbums;
         this.recyclerView = recyclerView;
+
+        setHasStableIds(true);
 
         res = context.getResources();
     }
@@ -96,9 +106,47 @@ public class MyAdapter2 extends RecyclerView.Adapter {
 
     }
 
+    @Override
+    public boolean onCheckCanStartDrag(RecyclerView.ViewHolder holder, int position, int x, int y) {
+        return true;
+    }
+
+    @Override
+    public ItemDraggableRange onGetItemDraggableRange(RecyclerView.ViewHolder holder, int position) {
+        return null;
+    }
+
+    @Override
+    public void onMoveItem(int fromPosition, int toPosition) {
+
+        Lists_Album movedList = listsAlbums.remove(fromPosition);
+
+        listsAlbums.add(toPosition, movedList);
+
+    }
+
+    @Override
+    public boolean onCheckCanDrop(int draggingPosition, int dropPosition) {
+        return true;
+    }
+
+    @Override
+    public void onItemDragStarted(int position) {
+
+    }
+
+    @Override
+    public void onItemDragFinished(int fromPosition, int toPosition, boolean result) {
+
+    }
 
 
-    class VH extends RecyclerView.ViewHolder {
+    @Override
+    public long getItemId(int position) {
+        return listsAlbums.get(position).hashCode();
+    }
+
+    public class VH extends AbstractDraggableItemViewHolder {
 
         CardView info_card;
         TextView artist, title;

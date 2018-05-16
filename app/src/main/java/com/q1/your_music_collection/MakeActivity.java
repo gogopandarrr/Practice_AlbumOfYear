@@ -19,6 +19,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 
+import com.h6ah4i.android.widget.advrecyclerview.draggable.RecyclerViewDragDropManager;
 import com.leinardi.android.speeddial.SpeedDialActionItem;
 import com.leinardi.android.speeddial.SpeedDialOverlayLayout;
 import com.leinardi.android.speeddial.SpeedDialView;
@@ -102,12 +103,19 @@ public class MakeActivity extends AppCompatActivity {
 
 
 
+        RecyclerViewDragDropManager dragDropManager = new RecyclerViewDragDropManager();
+        dragDropManager.setInitiateOnMove(false);
+        dragDropManager.setInitiateOnLongPress(true);
+
         coverRecycle = findViewById(R.id.cover_recycler);
         infoRecycle = findViewById(R.id.info_recycler);
         infoRecycle.setHasFixedSize(false);
 
+
         adapter2 = new MyAdapter2(this, listsAlbums, infoRecycle);
-        infoRecycle.setAdapter(adapter2);
+        infoRecycle.setAdapter(dragDropManager.createWrappedAdapter(adapter2));
+
+        dragDropManager.attachRecyclerView(infoRecycle);
 
         tv_name = findViewById(R.id.tv_nameCollection);
 

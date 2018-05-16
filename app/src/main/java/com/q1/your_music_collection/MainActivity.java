@@ -295,6 +295,8 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
 
             adapterMain.notifyItemInserted(collections.size());
 
+            discreteScrollView.smoothScrollToPosition(collections.size()-1);
+
 
 
         }else if(resultCode==RESULT_OK&&requestCode==20){
@@ -305,7 +307,14 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
 
             collections.set(position, new Lists_Collection(listsAlbums, data.getStringExtra("nameList")));
 
-            adapterMain.notifyItemChanged(position);
+            discreteScrollView.setAdapter(null);
+
+            adapterMain= new MyAdapter_Main(this, collections);
+
+            discreteScrollView.setAdapter(adapterMain);
+
+            discreteScrollView.smoothScrollToPosition(position);
+
 
         }else if(resultCode==RESULT_OK&&requestCode==0){
 
