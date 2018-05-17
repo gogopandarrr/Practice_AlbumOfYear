@@ -24,6 +24,8 @@ import com.android.volley.toolbox.Volley;
 import com.yarolegovich.discretescrollview.DSVOrientation;
 import com.yarolegovich.discretescrollview.DiscreteScrollView;
 import com.yarolegovich.discretescrollview.transform.ScaleTransformer;
+import com.yarolegovich.lovelydialog.LovelyTextInputDialog;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -41,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
     JSONObject obj;
     TinyDB tinyDB;
     ArrayList<Object> stp;
-
+    String id;
 
 
 
@@ -300,6 +302,27 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
         loadToPhone();
     }
 
+    private void showTextInputDialog() {
+        new LovelyTextInputDialog(this, R.style.EditTextTintTheme)
+                .setTopColorRes(R.color.darkDeepOrange)
+                .setTitle(R.string.text_input_title)
+                .setIcon(R.drawable.ic_listen)
+                .setConfirmButton(android.R.string.ok, new LovelyTextInputDialog.OnTextInputConfirmListener() {
+                    @Override
+                    public void onTextInputConfirmed(String text) {
+                        userId.setText(text);
+                        tinyDB.putString("nickName",text);
+                    }})
+                .setNegativeButton(android.R.string.no, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        userId.setText(id);
+                    }
+                }).show();
+    }
+
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -332,10 +355,15 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
 
         }else if(resultCode==RESULT_OK&&requestCode==0){
 
-            String id = data.getStringExtra("userId");
+            id = data.getStringExtra("userId");
+
+            if(id != null){
+
+                showTextInputDialog();
+
+            }
 
 
-            userId.setText(id);
 
 
 

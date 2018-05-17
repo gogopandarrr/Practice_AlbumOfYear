@@ -94,10 +94,9 @@ public class MyAdapter_Community extends RecyclerView.Adapter {
             super(itemView);
 
             more = itemView.findViewById(R.id.iv_more);
-            linearLayout = itemView.findViewById(R.id.linear);
+            linearLayout = itemView.findViewById(R.id.line2);
             user = itemView.findViewById(R.id.tv_user);
             title = itemView.findViewById(R.id.tv_db_title);
-            userPic = itemView.findViewById(R.id.iv_user);
             iv[0] = itemView.findViewById(R.id.iv1);
             iv[1] = itemView.findViewById(R.id.iv2);
             iv[2] = itemView.findViewById(R.id.iv3);

@@ -46,10 +46,7 @@ public class MyAdapter2 extends RecyclerView.Adapter implements DraggableItemAda
     private int selectedItem = UNSELECTED;
     VH vh;
 
-    public static final int MODE_DEFAULT = 0;
     public static final int MODE_SONIC = 1;
-    public static final int MODE_SONIC_WITH_OFFLINE_CACHE = 2;
-    private static final int PERMISSION_REQUEST_CODE_STORAGE = 1;
     private String url;
 
 
@@ -91,10 +88,10 @@ public class MyAdapter2 extends RecyclerView.Adapter implements DraggableItemAda
 
             vh.artist.setText(listsAlbum.artist);
             vh.title.setText(listsAlbum.album);
+            vh.comment.setText(listsAlbum.opinion);
 
 
             Glide.with(context).load(listsAlbum.cover).into(vh.cover);
-            Glide.with(context).load(listsAlbum.getRankImg()).into(vh.rank);
 
     }
 
@@ -158,13 +155,12 @@ public class MyAdapter2 extends RecyclerView.Adapter implements DraggableItemAda
 
         CardView info_card;
         TextView artist, title;
-        SmileRating smileRating;
         ImageView bt_delete, bt_url;
         ViewSwitcher switcherT, switcherC;
         AutoLinkTextView comment;
         EditText ev_title, ev_comment;
         ExpandableLayout expandableLayout;
-        ImageView btnOpen, cover, rank;
+        ImageView btnOpen, cover;
 
 
 
@@ -172,9 +168,7 @@ public class MyAdapter2 extends RecyclerView.Adapter implements DraggableItemAda
             super(itemView);
 
             bt_url = itemView.findViewById(R.id.btn_url);
-            rank= itemView.findViewById(R.id.rank);
             cover= itemView.findViewById(R.id.cover);
-            smileRating = itemView.findViewById(R.id.smile_rating);
             artist = itemView.findViewById(R.id.tv_artist);
             title = itemView.findViewById(R.id.tv_albumTitle);
             info_card = itemView.findViewById(R.id.info_card);
@@ -268,7 +262,8 @@ public class MyAdapter2 extends RecyclerView.Adapter implements DraggableItemAda
 
                                 comment.setAutoLinkText(ev_comment.getText().toString());
                                 switcherC.showNext();
-                                listsAlbum.setOpinion(comment.getText().toString());
+                                listsAlbum.setOpinion(ev_comment.getText().toString());
+                                Log.e("a1",listsAlbum.getOpinion());
 
                             }
                         }
@@ -280,47 +275,6 @@ public class MyAdapter2 extends RecyclerView.Adapter implements DraggableItemAda
                 }
             });
 
-            smileRating.setOnSmileySelectionListener(new SmileRating.OnSmileySelectionListener() {
-                @Override
-                public void onSmileySelected(int smiley, boolean reselected) {
-
-                    int position = getAdapterPosition();
-
-                    VH holder= (VH) recyclerView.findViewHolderForAdapterPosition(position);
-
-                    switch (smiley){
-
-                        case SmileRating.BAD:
-                            listsAlbum.setRankImg(R.drawable.emo2_bad);
-                            Glide.with(context).load(listsAlbum.getRankImg()).into(holder.rank);
-                            notifyDataSetChanged();
-                            break;
-                        case SmileRating.GOOD:
-                            listsAlbum.setRankImg(R.drawable.emo4_good);
-                            Glide.with(context).load(listsAlbum.getRankImg()).into(holder.rank);
-                            notifyDataSetChanged();
-                            break;
-                        case SmileRating.GREAT:
-                            listsAlbum.setRankImg(R.drawable.emo5_great);
-                            Glide.with(context).load(listsAlbum.getRankImg()).into(holder.rank);
-                            notifyDataSetChanged();
-                            break;
-                        case SmileRating.OKAY:
-                            listsAlbum.setRankImg(R.drawable.emo3_okay);
-                            Glide.with(context).load(listsAlbum.getRankImg()).into(holder.rank);
-                            notifyDataSetChanged();
-                            break;
-                        case SmileRating.TERRIBLE:
-                            listsAlbum.setRankImg(R.drawable.emo1_terrible);
-                            Glide.with(context).load(listsAlbum.getRankImg()).into(holder.rank);
-                            notifyDataSetChanged();
-                            break;
-
-
-                    }
-
-                }
-            });
 
 
 

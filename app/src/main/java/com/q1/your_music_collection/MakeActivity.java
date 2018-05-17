@@ -156,6 +156,8 @@ public class MakeActivity extends AppCompatActivity {
             }
             modiTitle = data.getStringExtra("nameList");
             tv_name.setText(modiTitle);
+
+
             modiPosition = data.getIntExtra("position",0);
 
             adapter2.notifyDataSetChanged();

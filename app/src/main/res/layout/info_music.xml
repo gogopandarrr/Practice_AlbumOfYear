@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/info_card"
-    android:layout_marginTop="15dp"
+    android:layout_marginTop="8dp"
     app:cardCornerRadius="12dp"
     app:cardUseCompatPadding="true"
     >
@@ -58,7 +58,8 @@
             android:id="@+id/switcher_comment"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="135dp"
+            android:layout_toEndOf="@+id/cover"
+            android:layout_margin="10dp"
             >
             <com.luseen.autolinklibrary.AutoLinkTextView
                 android:id="@+id/tv_comment"
@@ -86,18 +87,6 @@
             android:textSize="12dp"
             android:text="artist"
             android:textColor="#9c6409" />
-
-        <ImageView
-            android:scaleType="centerInside"
-            android:id="@+id/rank"
-            android:src="@drawable/emo0_basic"
-            android:layout_below="@+id/switcher_album"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="15dp"
-            android:layout_marginBottom="4dp"
-            android:layout_width="40dp"
-            android:layout_height="40dp" />
-
 
 
 
@@ -162,14 +151,6 @@
             app:el_expanded="false"
             app:el_parallax="0.5"
             >
-
-
-            <com.hsalf.smilerating.SmileRating
-                android:id="@+id/smile_rating"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="190dp" />
-
 
 
 

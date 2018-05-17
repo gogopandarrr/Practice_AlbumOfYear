@@ -12,14 +12,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/iv_user"
-            android:src="@drawable/cover2"
-            android:layout_marginTop="12dp"
-            android:layout_marginLeft="8dp"
-            android:layout_width="80dp"
-            android:layout_height="80dp" />
-
         <TextView
             android:textSize="16dp"
             android:textStyle="bold"
@@ -37,87 +29,108 @@
             android:text="user"
             android:layout_marginBottom="10dp"
             android:id="@+id/tv_user"
-            android:layout_below="@+id/iv_user"
+            android:layout_marginTop="12dp"
             android:layout_width="80dp"
             android:layout_height="wrap_content" />
 
         <LinearLayout
             android:orientation="vertical"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
             android:layout_marginBottom="10dp"
             android:layout_marginLeft="20dp"
-            android:layout_width="260dp"
+            android:layout_width="300dp"
+            android:weightSum="5"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tv_db_title"
-            android:layout_toEndOf="@+id/iv_user"
             android:id="@+id/linearLayout">
 
             <LinearLayout
+                android:id="@+id/line1"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="50dp">
+                android:layout_height="60dp">
                 <ImageView
                     android:id="@+id/iv1"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp" />
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="60dp" />
                 <ImageView
                     android:id="@+id/iv2"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp" />
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="60dp" />
                 <ImageView
                     android:id="@+id/iv3"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp" />
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="60dp" />
                 <ImageView
                     android:id="@+id/iv4"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp" />
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="60dp" />
                 <ImageView
                     android:id="@+id/iv5"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp" />
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="60dp" />
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/linear"
+                android:id="@+id/line2"
                 android:visibility="gone"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="50dp">
+                android:layout_height="60dp">
                 <ImageView
                     android:id="@+id/iv6"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp" />
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="60dp" />
                 <ImageView
                     android:id="@+id/iv7"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp" />
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="60dp" />
                 <ImageView
                     android:id="@+id/iv8"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp" />
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="60dp" />
                 <ImageView
                     android:id="@+id/iv9"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp" />
-                <ImageView
-                    android:id="@+id/iv10"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp" />
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="60dp" />
+
+                <RelativeLayout
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="60dp">
+                    <ImageView
+                        android:id="@+id/iv10"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                    <ImageView
+                        android:id="@+id/iv_more"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@mipmap/ic_add"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentEnd="true"
+                        android:visibility="gone"
+                        android:elevation="16dp"
+                        />
+
+                </RelativeLayout>
+
             </LinearLayout>
 
 
         </LinearLayout>
 
 
-        <ImageView
-            android:id="@+id/iv_more"
-            android:visibility="gone"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_alignBottom="@+id/linearLayout"
-            android:layout_alignEnd="@+id/tv_db_title"
-            android:src="@mipmap/ic_add" />
+
 
     </RelativeLayout>
 
