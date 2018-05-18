@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:gradient="http://schemas.android.com/apk/res-auto"
     tools:context="com.q1.your_music_collection.CommunityActivity">
 
+    <com.dynamitechetan.flowinggradient.FlowingGradient
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        gradient:transition_duration = "4000"
+        gradient:transition_drawable="@drawable/trans2"
+        />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/db_recycler"
@@ -16,4 +23,4 @@
 
     </android.support.v7.widget.RecyclerView>
 
-</android.support.constraint.ConstraintLayout>
+</RelativeLayout>

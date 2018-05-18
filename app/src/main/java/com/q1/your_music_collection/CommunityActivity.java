@@ -83,14 +83,16 @@ public class CommunityActivity extends AppCompatActivity {
                     for(String row : rows){
 
                         String[] datas = row.split("@#");
-                        if(datas.length!=3) continue;
-                        String title = datas[0];
-                        String json = datas[1];
-                        String date = datas[2];
+                        if(datas.length!=5) continue;
+                        String UID = datas[0];
+                        String name = datas[1];
+                        String title = datas[2];
+                        String json = datas[3];
+                        String date = datas[4];
 
 
 
-                        jsonParser(json, title, date);
+                        jsonParser(json, title, date, UID, name);
 
 
                     }
@@ -113,7 +115,7 @@ public class CommunityActivity extends AppCompatActivity {
     }
 
 
-    public void jsonParser(String jsonString, String title, String date){
+    public void jsonParser(String jsonString, String title, String date, String UID, String name){
 
 
         if(jsonString==null) return;
@@ -145,7 +147,7 @@ public class CommunityActivity extends AppCompatActivity {
 
             }
 
-            loadDBs.add(new Lists_LoadDB(title, listsAlbum, date));
+            loadDBs.add(new Lists_LoadDB(title, listsAlbum, date, UID, name));
             listsCovers.add(covers);
 
 

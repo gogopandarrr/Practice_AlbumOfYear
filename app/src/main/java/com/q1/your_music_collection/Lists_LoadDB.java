@@ -11,11 +11,31 @@ public class Lists_LoadDB {
     String title;
     ArrayList<Lists_Album> listsAlbums;
     String date;
+    String UID;
+    String name;
 
-    public Lists_LoadDB(String title, ArrayList<Lists_Album> listsAlbums, String date) {
+    public Lists_LoadDB(String title, ArrayList<Lists_Album> listsAlbums, String date, String UID, String name) {
         this.title = title;
         this.listsAlbums = listsAlbums;
         this.date = date;
+        this.UID = UID;
+        this.name = name;
+    }
+
+    public String getUID() {
+        return UID;
+    }
+
+    public void setUID(String UID) {
+        this.UID = UID;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getTitle() {
@@ -42,3 +62,4 @@ public class Lists_LoadDB {
         this.date = date;
     }
 }
+

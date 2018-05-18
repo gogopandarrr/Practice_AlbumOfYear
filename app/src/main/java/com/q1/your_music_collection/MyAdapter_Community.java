@@ -58,7 +58,12 @@ public class MyAdapter_Community extends RecyclerView.Adapter {
 
         VH vh = (VH) holder;
 
-        ((VH) holder).title.setText(loadDB.getTitle());
+        vh.title.setText(loadDB.getTitle());
+        vh.user.setText(loadDB.getName());
+        vh.date.setText(loadDB.getDate());
+
+
+
 
         if(coverlist.size()>5) {
             vh.linearLayout.setVisibility(View.VISIBLE);
@@ -93,6 +98,7 @@ public class MyAdapter_Community extends RecyclerView.Adapter {
         public VH(View itemView) {
             super(itemView);
 
+            date = itemView.findViewById(R.id.date);
             more = itemView.findViewById(R.id.iv_more);
             linearLayout = itemView.findViewById(R.id.line2);
             user = itemView.findViewById(R.id.tv_user);
