@@ -26,7 +26,8 @@
         <activity android:name=".LoginActivity" />
         <activity android:name=".SearchActivity" />
         <activity android:name=".CommunityActivity" />
-        <activity android:name=".webView.BrowserActivity"></activity>
+        <activity android:name=".webView.BrowserActivity" />
+        <activity android:name=".RegisterActivity"></activity>
     </application>
 
 </manifest>

@@ -1,9 +1,14 @@
 package com.q1.your_music_collection;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
+import android.transition.Explode;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -11,191 +16,142 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 
-import com.facebook.FacebookSdk;
-import com.facebook.LoggingBehavior;
 
-import studios.codelight.smartloginlibrary.LoginType;
-import studios.codelight.smartloginlibrary.SmartLogin;
-import studios.codelight.smartloginlibrary.SmartLoginConfig;
-import studios.codelight.smartloginlibrary.SmartLoginFactory;
-import studios.codelight.smartloginlibrary.UserSessionManager;
-import studios.codelight.smartloginlibrary.users.SmartFacebookUser;
-import studios.codelight.smartloginlibrary.users.SmartGoogleUser;
-import studios.codelight.smartloginlibrary.users.SmartUser;
-import studios.codelight.smartloginlibrary.util.SmartLoginException;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+
 
 public class LoginActivity extends AppCompatActivity {
 
-    private Button facebookLoginButton, googleLoginButton, customSigninButton, customSignupButton, logoutButton;
-    private EditText emailEditText, passwordEditText;
-    SmartUser currentUser;
-    //GoogleApiClient mGoogleApiClient;
-    SmartLoginConfig config;
-    SmartLogin smartLogin;
+    private EditText etUsername;
+    private EditText etPassword;
+    private Button btGo;
+    private FirebaseAuth mAuth;
+    private CardView cv;
+    private FloatingActionButton fab;
+    private TinyDB tinyDB;
 
-    String userId;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FacebookSdk.setApplicationId(getString(R.string.facebook_app_id));
-        FacebookSdk.sdkInitialize(getApplicationContext());
-        if (BuildConfig.DEBUG) {
-            FacebookSdk.setIsDebugEnabled(true);
-            FacebookSdk.addLoggingBehavior(LoggingBehavior.INCLUDE_ACCESS_TOKENS);
-        }
         setContentView(R.layout.activity_login);
+        initView();
 
-        bindViews();
-        setListeners();
+        tinyDB = new TinyDB(this);
+
+        String email = tinyDB.getString("email");
+        String password = tinyDB.getString("password");
+
+        etUsername.setText(email);
+        etPassword.setText(password);
+
+        setListener();
+
+
+    }//oc
 
 
 
-        config = new SmartLoginConfig(this, new studios.codelight.smartloginlibrary.SmartLoginCallbacks() {
+    private void signIn(final String email, final String password){
+
+        mAuth = FirebaseAuth.getInstance();
+        mAuth.signInWithEmailAndPassword(email,password).
+                addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if(task.isSuccessful()){
+
+                            Intent intent = getIntent();
+
+                            FirebaseUser user = mAuth.getCurrentUser();
+
+
+                            Toast.makeText(LoginActivity.this, "Sign in", Toast.LENGTH_SHORT).show();
+
+                            intent.putExtra("email", email);
+
+                            String uid = user.getUid();
+
+                            intent.putExtra("uid", uid);
+
+                            intent.putExtra("password", password);
+
+
+                            setResult(RESULT_OK,intent);
+
+                            finish();
+                        }else{
+
+                            Toast.makeText(LoginActivity.this, "fail", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
+
+
+    private void initView() {
+        etUsername = findViewById(R.id.et_username);
+        etPassword = findViewById(R.id.et_password);
+        btGo = findViewById(R.id.bt_go);
+        cv = findViewById(R.id.cv);
+        fab = findViewById(R.id.fab);
+    }
+
+    private void setListener() {
+        btGo.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onLoginSuccess(SmartUser user) {
+            public void onClick(View view) {
+                Explode explode = new Explode();
+                explode.setDuration(500);
 
-                Toast.makeText(LoginActivity.this, user.toString(), Toast.LENGTH_SHORT).show();
-                refreshLayout();
-            }
+                getWindow().setExitTransition(explode);
+                getWindow().setEnterTransition(explode);
 
-            @Override
-            public void onLoginFailure(SmartLoginException e) {
-                Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-            }
 
-            @Override
-            public SmartUser doCustomLogin() {
-                SmartUser user = new SmartUser();
-                user.setEmail(emailEditText.getText().toString());
-                return user;
-            }
+                String email = etUsername.getText().toString();
+                String password = etPassword.getText().toString();
 
-            @Override
-            public SmartUser doCustomSignup() {
-                SmartUser user = new SmartUser();
-                user.setEmail(emailEditText.getText().toString());
-                return user;
+                signIn(email, password);
+
+
+
+
             }
         });
-        config.setFacebookAppId(getString(R.string.facebook_app_id));
-        config.setFacebookPermissions(null);
-        config.setGoogleApiClient(null);
-
-
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getWindow().setExitTransition(null);
+                getWindow().setEnterTransition(null);
+                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(LoginActivity.this, fab, fab.getTransitionName());
+                startActivity(new Intent(LoginActivity.this, RegisterActivity.class), options.toBundle());
+            }
+        });
     }
-    private void bindViews() {
-        facebookLoginButton = (Button) findViewById(R.id.facebook_login_button);
-        googleLoginButton = (Button) findViewById(R.id.google_login_button);
-        customSigninButton = (Button) findViewById(R.id.custom_signin_button);
-        customSignupButton = (Button) findViewById(R.id.custom_signup_button);
-        emailEditText = (EditText) findViewById(R.id.email_edittext);
-        passwordEditText = (EditText) findViewById(R.id.password_edittext);
-        logoutButton = (Button) findViewById(R.id.logout_button);
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        fab.setVisibility(View.GONE);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        currentUser = UserSessionManager.getCurrentUser(this);
-        refreshLayout();
-    }
-
-    private void refreshLayout() {
-        currentUser = UserSessionManager.getCurrentUser(this);
-        if (currentUser != null) {
-            Log.d("Smart Login", "Logged in user: " + currentUser.toString());
-
-
-            userId = currentUser.getUserId();
-
-            Intent intent = getIntent();
-
-            intent.putExtra("userId", userId);
-            setResult(RESULT_OK, intent);
-            finish();
-
-
-        } else {
-            facebookLoginButton.setVisibility(View.VISIBLE);
-            googleLoginButton.setVisibility(View.VISIBLE);
-            customSigninButton.setVisibility(View.VISIBLE);
-            customSignupButton.setVisibility(View.VISIBLE);
-            emailEditText.setVisibility(View.VISIBLE);
-            passwordEditText.setVisibility(View.VISIBLE);
-            logoutButton.setVisibility(View.GONE);
-        }
+        fab.setVisibility(View.VISIBLE);
     }
 
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+    protected void onStart() {
+        super.onStart();
 
-        super.onActivityResult(requestCode, resultCode, data);
-        if (smartLogin != null) {
-            smartLogin.onActivityResult(requestCode, resultCode, data, config);
-        }
+
+
     }
-
-    private void setListeners() {
-        facebookLoginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Perform Facebook login
-                smartLogin = SmartLoginFactory.build(LoginType.Facebook);
-                smartLogin.login(config);
-            }
-        });
-
-        googleLoginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Perform Google login
-                smartLogin = SmartLoginFactory.build(LoginType.Google);
-                smartLogin.login(config);
-            }
-        });
-
-        customSigninButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Perform custom sign in
-                smartLogin = SmartLoginFactory.build(LoginType.CustomLogin);
-                smartLogin.login(config);
-            }
-        });
-
-        customSignupButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Perform custom sign up
-                smartLogin = SmartLoginFactory.build(LoginType.CustomLogin);
-                smartLogin.signup(config);
-            }
-        });
-
-        logoutButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (currentUser != null) {
-                    if (currentUser instanceof SmartFacebookUser) {
-                        smartLogin = SmartLoginFactory.build(LoginType.Facebook);
-
-                    } else if(currentUser instanceof SmartGoogleUser) {
-                        smartLogin = SmartLoginFactory.build(LoginType.Google);
-                    } else {
-                        smartLogin = SmartLoginFactory.build(LoginType.CustomLogin);
-                    }
-                    boolean result = smartLogin.logout(LoginActivity.this);
-                    if (result) {
-                        refreshLayout();
-                        Toast.makeText(LoginActivity.this, "User logged out successfully", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            }
-        });
-    }
-
-
 }

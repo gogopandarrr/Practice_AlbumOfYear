@@ -5,6 +5,7 @@ package com.q1.your_music_collection;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -21,6 +22,11 @@ import com.android.volley.Response;
 import com.android.volley.error.VolleyError;
 import com.android.volley.request.SimpleMultiPartRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.yarolegovich.discretescrollview.DSVOrientation;
 import com.yarolegovich.discretescrollview.DiscreteScrollView;
 import com.yarolegovich.discretescrollview.transform.ScaleTransformer;
@@ -32,18 +38,23 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 
+
 public class MainActivity extends AppCompatActivity implements DiscreteScrollView.OnItemChangedListener, View.OnClickListener, DiscreteScrollView.ScrollListener{
 
 
     ArrayList<Lists_Collection> collections= new ArrayList<>();
     ArrayList<Lists_Album> listsAlbums= new ArrayList<>();
     DiscreteScrollView discreteScrollView;
-    TextView title, subTitle, userId;
+    TextView title, subTitle, userId, userName;
     MyAdapter_Main adapterMain;
     JSONObject obj;
     TinyDB tinyDB;
     ArrayList<Object> stp;
-    String id;
+    String email, password, uid, name;
+    FirebaseAuth mAuth;
+    FirebaseUser user;
+    boolean islogin = false;
+
 
 
 
@@ -56,6 +67,7 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
 
         tinyDB = new TinyDB(this);
 
+        userName = findViewById(R.id.userName);
         userId = findViewById(R.id.userId);
         title = findViewById(R.id.tv_title_Collection);
         subTitle = findViewById(R.id.tv_subTitle);
@@ -84,8 +96,18 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
 
     public void login(View v){
 
-        Intent intent = new Intent(this, LoginActivity.class);
-        startActivityForResult(intent, 0);
+        if(islogin){
+
+            mAuth.signOut();
+            islogin =false;
+            userId.setText("sign in");
+            userName.setVisibility(View.GONE);
+
+        }else{
+
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivityForResult(intent, 0);
+        }
 
 
 
@@ -184,6 +206,11 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
 
     }
 
+    public void clickName(View v){
+
+        showTextInputDialog();
+
+    }
 
     public void clickUpload(View v){
 
@@ -210,6 +237,8 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
         String title = collections.get(position).getNameList();
         multiPartRequest.addStringParam("MyJson",obj.toString());
         multiPartRequest.addStringParam("Title", title);
+        multiPartRequest.addStringParam("Name", name);
+        multiPartRequest.addStringParam("UID", uid);
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
 
@@ -241,6 +270,7 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
 
     }
     public void  loadToPhone(){
+
 
     stp = tinyDB.getListObject("collection",Lists_Collection.class);
 
@@ -310,17 +340,39 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
                 .setConfirmButton(android.R.string.ok, new LovelyTextInputDialog.OnTextInputConfirmListener() {
                     @Override
                     public void onTextInputConfirmed(String text) {
-                        userId.setText(text);
-                        tinyDB.putString("nickName",text);
+                        name = text;
+                        tinyDB.putString("nickName", name);
+                        userUpdate();
+
                     }})
                 .setNegativeButton(android.R.string.no, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        userId.setText(id);
+                        int index= email.indexOf("@");
+                        name = email.substring(0, index);
+                        tinyDB.putString("nickName",name);
+                        userUpdate();
                     }
                 }).show();
     }
 
+    private void userUpdate(){
+
+        UserProfileChangeRequest profileChangeRequest = new UserProfileChangeRequest.Builder()
+                .setDisplayName(name).build();
+        user.updateProfile(profileChangeRequest).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    Toast.makeText(MainActivity.this, "User profile updated.", Toast.LENGTH_SHORT).show();
+                    userName.setText(" Welcome, "+name+" ");
+                }
+
+            }
+        });
+
+
+    }
 
 
     @Override
@@ -355,12 +407,33 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
 
         }else if(resultCode==RESULT_OK&&requestCode==0){
 
-            id = data.getStringExtra("userId");
+            email = data.getStringExtra("email");
+            password = data.getStringExtra("password");
+            uid = data.getStringExtra("uid");
 
-            if(id != null){
+            tinyDB.putString("email",email);
+            tinyDB.putString("password",password);
+            tinyDB.putString("uid",uid);
+
+            mAuth = FirebaseAuth.getInstance();
+            user = mAuth.getCurrentUser();
+
+            name = user.getDisplayName();
+
+
+            if(name == null){
 
                 showTextInputDialog();
 
+            }
+
+
+            if(user != null){
+
+                userId.setText("Logout");
+                userName.setVisibility(View.VISIBLE);
+                userName.setText(" Welcome, "+name+" ");
+                islogin = true;
             }
 
 
