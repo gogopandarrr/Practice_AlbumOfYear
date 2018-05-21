@@ -97,7 +97,7 @@ public class MyAdapter_Main extends RecyclerView.Adapter {
 
     class VH extends RecyclerView.ViewHolder {
 
-        ImageView btn_add;
+
 
 
 
@@ -108,7 +108,7 @@ public class MyAdapter_Main extends RecyclerView.Adapter {
                 kbView[0] = itemView.findViewById(R.id.img1);
                 kbView[1] = itemView.findViewById(R.id.img2);
 
-                btn_add= itemView.findViewById(R.id.iv_btnAdd);
+
 
             KenBurnsView.TransitionListener listener = new KenBurnsView.TransitionListener() {
                 @Override

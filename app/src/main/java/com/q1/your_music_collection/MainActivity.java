@@ -214,36 +214,46 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
 
     public void clickUpload(View v){
 
-        int position = discreteScrollView.getCurrentItem();
+       if(islogin){
 
-        listToJSON(position);
+           int position = discreteScrollView.getCurrentItem();
 
-
-
-        String serverUrl="http://gogopanda.dothome.co.kr/yourCollections/insertDB.php";
-
-        SimpleMultiPartRequest multiPartRequest = new SimpleMultiPartRequest(Request.Method.POST, serverUrl, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                new AlertDialog.Builder(MainActivity.this).setMessage(response).setPositiveButton("ok", null).create().show();
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(MainActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
-
-            }
-        });
-        String title = collections.get(position).getNameList();
-        multiPartRequest.addStringParam("MyJson",obj.toString());
-        multiPartRequest.addStringParam("Title", title);
-        multiPartRequest.addStringParam("Name", name);
-        multiPartRequest.addStringParam("UID", uid);
-
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
+           Log.e("po",position+"");
+           listToJSON(position);
 
 
-        requestQueue.add(multiPartRequest);
+
+           String serverUrl="http://gogopanda.dothome.co.kr/yourCollections/insertDB.php";
+
+           SimpleMultiPartRequest multiPartRequest = new SimpleMultiPartRequest(Request.Method.POST, serverUrl, new Response.Listener<String>() {
+               @Override
+               public void onResponse(String response) {
+                   new AlertDialog.Builder(MainActivity.this).setMessage(response).setPositiveButton("ok", null).create().show();
+               }
+           }, new Response.ErrorListener() {
+               @Override
+               public void onErrorResponse(VolleyError error) {
+                   Toast.makeText(MainActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+
+               }
+           });
+           String title = collections.get(position).getNameList();
+           multiPartRequest.addStringParam("MyJson",obj.toString());
+           multiPartRequest.addStringParam("Title", title);
+           multiPartRequest.addStringParam("Name", name);
+           multiPartRequest.addStringParam("UID", uid);
+
+           RequestQueue requestQueue = Volley.newRequestQueue(this);
+
+
+           requestQueue.add(multiPartRequest);
+
+
+       }else Toast.makeText(this, "need to sign in..", Toast.LENGTH_SHORT).show();
+
+
+
+
 
 
 
@@ -348,10 +358,13 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
                 .setNegativeButton(android.R.string.no, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        int index= email.indexOf("@");
-                        name = email.substring(0, index);
-                        tinyDB.putString("nickName",name);
-                        userUpdate();
+
+                        if(name==null) {
+                            int index = email.indexOf("@");
+                            name = email.substring(0, index);
+                            tinyDB.putString("nickName", name);
+                            userUpdate();
+                        }else return;
                     }
                 }).show();
     }

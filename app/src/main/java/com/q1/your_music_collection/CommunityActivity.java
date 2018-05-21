@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -44,6 +45,13 @@ public class CommunityActivity extends AppCompatActivity {
 
 
     }//oc
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+
+    }
 
     public void loadDB(){
 

@@ -1,8 +1,10 @@
 package com.q1.your_music_collection;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +29,8 @@ public class MyAdapter_Community extends RecyclerView.Adapter {
     ArrayList<ArrayList<String>> listsCovers;
     ArrayList<String> coverlist = new ArrayList<>();
     Lists_LoadDB loadDB;
+    ArrayList<Lists_Album> listsAlbums;
+    String title;
 
     public MyAdapter_Community(Context context, ArrayList<Lists_LoadDB> loadDBs, ArrayList<ArrayList<String>> listsCovers) {
         this.context = context;
@@ -35,6 +39,8 @@ public class MyAdapter_Community extends RecyclerView.Adapter {
 
 
     }
+
+
 
     @NonNull
     @Override
@@ -51,8 +57,9 @@ public class MyAdapter_Community extends RecyclerView.Adapter {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, int position) {
 
+        holder.itemView.setTag(position);
         coverlist = listsCovers.get(position);
         loadDB = loadDBs.get(position);
 
@@ -61,7 +68,25 @@ public class MyAdapter_Community extends RecyclerView.Adapter {
         vh.title.setText(loadDB.getTitle());
         vh.user.setText(loadDB.getName());
         vh.date.setText(loadDB.getDate());
+        vh.bt_dbv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
+
+                int p = (int) holder.itemView.getTag();
+
+                listsAlbums = loadDBs.get(p).getListsAlbums();
+                title = loadDBs.get(p).getTitle();
+                Intent intent = new Intent(context, DBViewActivity.class);
+
+                intent.putExtra("title",title);
+                intent.putParcelableArrayListExtra("listsAlbums",listsAlbums);
+                Log.e("size", listsAlbums.size()+"");
+                context.startActivity(intent);
+
+
+            }
+        });
 
 
 
@@ -81,6 +106,9 @@ public class MyAdapter_Community extends RecyclerView.Adapter {
 
     }
 
+
+
+
     @Override
     public int getItemCount() {
         return loadDBs.size();
@@ -89,15 +117,15 @@ public class MyAdapter_Community extends RecyclerView.Adapter {
     class VH extends RecyclerView.ViewHolder{
 
         TextView user, title, date, no;
-        CircleImageView userPic;
         ImageView iv[] = new ImageView[10];
         LinearLayout linearLayout;
-        ImageView more;
+        ImageView more, bt_dbv;
 
 
         public VH(View itemView) {
             super(itemView);
 
+            bt_dbv = itemView.findViewById(R.id.bt_dbv);
             date = itemView.findViewById(R.id.date);
             more = itemView.findViewById(R.id.iv_more);
             linearLayout = itemView.findViewById(R.id.line2);

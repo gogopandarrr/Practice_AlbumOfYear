@@ -27,7 +27,8 @@
         <activity android:name=".SearchActivity" />
         <activity android:name=".CommunityActivity" />
         <activity android:name=".webView.BrowserActivity" />
-        <activity android:name=".RegisterActivity"></activity>
+        <activity android:name=".RegisterActivity" />
+        <activity android:name=".DBViewActivity"></activity>
     </application>
 
 </manifest>
