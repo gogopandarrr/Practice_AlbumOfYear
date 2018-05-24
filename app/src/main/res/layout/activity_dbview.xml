@@ -7,6 +7,7 @@
     tools:context="com.q1.your_music_collection.DBViewActivity">
 
     <android.support.v7.widget.RecyclerView
+        android:clipToPadding="false"
         android:id="@+id/recycler_dbv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>

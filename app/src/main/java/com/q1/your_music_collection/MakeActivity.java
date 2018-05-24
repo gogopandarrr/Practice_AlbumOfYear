@@ -1,7 +1,6 @@
 package com.q1.your_music_collection;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Rect;
@@ -11,7 +10,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -33,14 +31,14 @@ public class MakeActivity extends AppCompatActivity {
 
     ArrayList<Lists_Album> listsAlbums = new ArrayList<>();
 
-    RecyclerView infoRecycle,coverRecycle;
-    MyAdapter2 adapter2;
+    RecyclerView infoRecycle;
+    MyAdapter_Make adapter2;
+
     SpeedDialView speedDialView;
     SpeedDialOverlayLayout overlayLayout;
     TextView tv_name;
 
-
-    boolean modify;
+    int mode;
     int modiPosition;
     String modiTitle;
 
@@ -108,47 +106,39 @@ public class MakeActivity extends AppCompatActivity {
         dragDropManager.setInitiateOnMove(false);
         dragDropManager.setInitiateOnLongPress(true);
 
-        coverRecycle = findViewById(R.id.cover_recycler);
+
         infoRecycle = findViewById(R.id.info_recycler);
         infoRecycle.setHasFixedSize(false);
 
-
-        adapter2 = new MyAdapter2(this, listsAlbums, infoRecycle);
+        adapter2 = new MyAdapter_Make(this, listsAlbums, infoRecycle);
         infoRecycle.setAdapter(dragDropManager.createWrappedAdapter(adapter2));
 
         dragDropManager.attachRecyclerView(infoRecycle);
 
+
+
         tv_name = findViewById(R.id.tv_nameCollection);
-
-
-
         tv_name.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 showTextInputDialog();
-
-
             }
         });
 
 
-
-
-        RecyclerView.LayoutManager layoutManager2 = new LinearLayoutManager(this);
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 2);
-
-        coverRecycle.setLayoutManager(layoutManager);
+        RecyclerView.LayoutManager layoutManager2 = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL, false);
         infoRecycle.setLayoutManager(layoutManager2);
+
+
 
 
 
         Intent data = getIntent();
 
 
-        modify = data.getBooleanExtra("modify", false);
+        mode = data.getIntExtra("mode",-1);
 
-        if(modify){
+        if(mode==222||mode==333){
             ArrayList<Lists_Album> temp = data.getParcelableArrayListExtra("listAlbums");
 
             for(int i=0; i<temp.size();i++) {
@@ -158,7 +148,7 @@ public class MakeActivity extends AppCompatActivity {
             tv_name.setText(modiTitle);
 
 
-            modiPosition = data.getIntExtra("position",0);
+            modiPosition = data.getIntExtra("position",-1);
 
             adapter2.notifyDataSetChanged();
 
@@ -229,16 +219,39 @@ public class MakeActivity extends AppCompatActivity {
     public void clickSave(){
 
 
-        Intent intent = getIntent();
-        if(modify){
-            intent.putExtra("position",modiPosition);
+        switch (mode){
+
+            case 111:
+                Intent intent1 = getIntent();
+                intent1.putParcelableArrayListExtra("myList",listsAlbums);
+                intent1.putExtra("nameList",tv_name.getText().toString());
+                setResult(RESULT_OK,intent1);
+                finish();
+                break;
+
+            case 222:
+                Intent intent2 = getIntent();
+                intent2.putExtra("position",modiPosition);
+                intent2.putParcelableArrayListExtra("myList",listsAlbums);
+                intent2.putExtra("nameList",tv_name.getText().toString());
+                setResult(RESULT_OK,intent2);
+                finish();
+                break;
+
+            case 333:
+                Intent intent3 = getIntent();
+                intent3.putParcelableArrayListExtra("myList",listsAlbums);
+                intent3.putExtra("nameList",tv_name.getText().toString());
+                setResult(RESULT_OK,intent3);
+                finish();
+                break;
+
+
 
         }
-        intent.putParcelableArrayListExtra("myList",listsAlbums);
-        intent.putExtra("nameList",tv_name.getText().toString());
-        setResult(RESULT_OK,intent);
 
-        finish();
+
+
 
 
     }
@@ -266,6 +279,8 @@ public class MakeActivity extends AppCompatActivity {
 
 
         adapter2.notifyDataSetChanged();
+
+        infoRecycle.scrollToPosition(listsAlbums.size()-1);
 
 
         super.onActivityResult(requestCode, resultCode, data);

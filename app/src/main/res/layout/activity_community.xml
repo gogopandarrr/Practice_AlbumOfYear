@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         gradient:transition_duration = "4000"
-        gradient:transition_drawable="@drawable/trans2"
+        gradient:transition_drawable="@drawable/tran3"
         />
 
     <android.support.v7.widget.RecyclerView

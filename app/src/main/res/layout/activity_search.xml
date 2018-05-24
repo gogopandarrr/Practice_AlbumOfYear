@@ -16,8 +16,7 @@
 
     <ImageView
         android:id="@+id/bt_searh"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="20dp"
+        android:layout_toEndOf="@+id/et_search"
         android:layout_marginTop="10dp"
         android:layout_width="50dp"
         android:layout_height="50dp"

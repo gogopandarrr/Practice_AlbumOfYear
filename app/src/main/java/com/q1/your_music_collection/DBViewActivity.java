@@ -5,13 +5,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 
 import java.util.ArrayList;
 
 public class DBViewActivity extends AppCompatActivity {
 
-    MyAdapter_DBView adapter_dbView;
+    MyAdapter_CoverView adapter_dbView;
     RecyclerView recyclerView;
     ArrayList<Lists_Album> listsAlbums;
     String title;
@@ -29,13 +28,14 @@ public class DBViewActivity extends AppCompatActivity {
 
 
         recyclerView = findViewById(R.id.recycler_dbv);
-        adapter_dbView = new MyAdapter_DBView(this, listsAlbums, recyclerView);
+        adapter_dbView = new MyAdapter_CoverView(this, listsAlbums, recyclerView);
 
         recyclerView.setAdapter(adapter_dbView);
 
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 3);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.addItemDecoration(new CustomRecyclerDecoration(10));
+             recyclerView.setLayoutManager(layoutManager);
+
+        recyclerView.addItemDecoration(new CustomRecyclerDecoration(3, 0, false, 0));
 
 
 

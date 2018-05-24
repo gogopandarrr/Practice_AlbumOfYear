@@ -84,7 +84,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:textColor="@color/material_teal_900"
+        android:textColor="@color/material_red_800"
         android:textStyle="bold"
         android:text="how many album" />
 
@@ -128,7 +128,7 @@
             android:src="@drawable/ic_new"
             android:tint="@color/material_blue_050"
             android:onClick="clickMake"
-            gradient:backgroundTint="@color/material_orange_a200"
+            gradient:backgroundTint="@color/material_blue_500"
             android:elevation="10dp"
             gradient:borderWidth="2dp"
 
@@ -164,10 +164,10 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="upload"
+            android:text="Upload"
             android:onClick="clickUpload"
-            android:textAllCaps="true"
-            android:textColor="@color/material_orange_900" />
+            android:textAllCaps="false"
+            android:textColor="@color/material_blue_400" />
 
         <Button
             android:id="@+id/btn_community"
@@ -177,8 +177,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Community"
-            android:textAllCaps="true"
-            android:textColor="@color/material_orange_900" />
+            android:textAllCaps="false"
+            android:textColor="@color/material_blue_400" />
 
     </LinearLayout>
 

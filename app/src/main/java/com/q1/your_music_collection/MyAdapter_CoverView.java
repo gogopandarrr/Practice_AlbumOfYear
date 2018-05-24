@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.h6ah4i.android.widget.advrecyclerview.draggable.DraggableItemAdapter;
 import com.luseen.autolinklibrary.AutoLinkMode;
 import com.luseen.autolinklibrary.AutoLinkTextView;
 
@@ -20,7 +21,7 @@ import java.util.ArrayList;
  * Created by alfo06-07 on 2018-03-16.
  */
 
-public class MyAdapter_DBView extends RecyclerView.Adapter {
+public class MyAdapter_CoverView extends RecyclerView.Adapter {
 
 
 
@@ -31,7 +32,7 @@ public class MyAdapter_DBView extends RecyclerView.Adapter {
     private static final int UNSELECTED = -1;
     private int selectedItem = UNSELECTED;
 
-    public MyAdapter_DBView(Context context, ArrayList<Lists_Album> listsAlbums, RecyclerView recyclerView) {
+    public MyAdapter_CoverView(Context context, ArrayList<Lists_Album> listsAlbums, RecyclerView recyclerView) {
         this.context = context;
         this.listsAlbums = listsAlbums;
         this.recyclerView = recyclerView;
@@ -48,7 +49,7 @@ public class MyAdapter_DBView extends RecyclerView.Adapter {
         View itemView;
 
 
-            itemView = inflater.inflate(R.layout.list_item, parent, false);
+            itemView = inflater.inflate(R.layout.list_cv, parent, false);
 
 
             VH holder = new VH(itemView);

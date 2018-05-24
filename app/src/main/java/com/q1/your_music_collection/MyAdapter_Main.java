@@ -57,7 +57,11 @@ public class MyAdapter_Main extends RecyclerView.Adapter {
         Lists_Collection collection = collections.get(position);
         listsAlbums = collection.getListsAlbums();
 
-        if (listsAlbums.size()==1) {
+        if (listsAlbums == null){
+
+            return;
+
+        }else if (listsAlbums.size()==1) {
             for (int i = 0; i < 2; i++) {
                 Glide.with(context).load(listsAlbums.get(0).getCover()).into(kbView[i]);
             }

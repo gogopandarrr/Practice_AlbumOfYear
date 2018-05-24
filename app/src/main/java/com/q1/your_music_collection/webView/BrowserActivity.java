@@ -11,16 +11,11 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
-import com.q1.your_music_collection.MainActivity;
-import com.q1.your_music_collection.MyAdapter2;
 import com.q1.your_music_collection.R;
-import com.tencent.sonic.sdk.SonicCacheInterceptor;
 import com.tencent.sonic.sdk.SonicConfig;
 import com.tencent.sonic.sdk.SonicEngine;
 import com.tencent.sonic.sdk.SonicSession;
 import com.tencent.sonic.sdk.SonicSessionConfig;
-import com.tencent.sonic.sdk.SonicSessionConnection;
-import com.tencent.sonic.sdk.SonicSessionConnectionInterceptor;
 
 public class BrowserActivity extends AppCompatActivity {
 

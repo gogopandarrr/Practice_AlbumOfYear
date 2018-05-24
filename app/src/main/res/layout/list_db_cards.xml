@@ -12,64 +12,93 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/bt_dbv"
-            android:elevation="10dp"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentTop="true"
-            android:clickable="true"
-            android:src="@drawable/download" />
 
         <LinearLayout
             android:id="@+id/topLiner"
             android:layout_marginTop="10dp"
-            android:layout_width="350dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:weightSum="5">
+            android:weightSum="9">
 
             <TextView
-                android:layout_weight="1"
-                android:layout_marginLeft="10dp"
-                android:gravity="center"
-                android:textStyle="bold"
-                android:textSize="12dp"
-                android:text="user"
-                android:textColor="@color/material_blue_800"
-                android:id="@+id/tv_user"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content" />
-
-            <TextView
+                android:layout_marginStart="16dp"
                 android:id="@+id/tv_db_title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="5dp"
-                android:layout_weight="7"
-                android:text="title of list"
-                android:textColor="@color/material_teal_600"
+                android:layout_weight="6"
+                android:text="Title of Music Collection"
+                android:textColor="@color/material_blue_800"
                 android:textSize="16dp"
                 android:textStyle="bold" />
+            <TextView
+                android:id="@+id/tv_total"
+                android:text="15A"
+                android:textColor="@color/material_blue_500"
+                android:textSize="14dp"
+                android:layout_gravity="bottom"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content" />
 
+            <ImageView
+                android:id="@+id/bt_dbv"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:clickable="true"
+                android:src="@drawable/download" />
+            <ImageView
+                android:id="@+id/bt_del"
+                android:visibility="visible"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="15dp"
 
+                android:clickable="true"
+                android:src="@drawable/bt_delete" />
 
 
         </LinearLayout>
 
+        <LinearLayout
+            android:orientation="horizontal"
+            android:id="@+id/secLiner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/topLiner"
+            android:weightSum="5"
+            >
+            <TextView
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:textSize="12dp"
+                android:text="user"
+                android:textColor="@color/material_lime_600"
+                android:id="@+id/tv_user"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:layout_weight="1"
+                android:id="@+id/date"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
 
-       <TextView
-           android:textColor="@color/sd_label_text_color"
-           android:text="0000-00-00"
-           android:layout_marginTop="10dp"
-           android:textSize="8dp"
-           android:layout_marginRight="8dp"
-           android:gravity="right"
-           android:id="@+id/date"
-           android:layout_below="@+id/topLiner"
-           android:layout_width="match_parent"
-           android:layout_height="wrap_content" />
+                android:text="0000-00-00"
+                android:textColor="@color/sd_label_text_color"
+                android:textSize="8dp" />
+
+            <Space
+                android:layout_weight="2"
+                android:layout_width="0dp"
+                android:layout_height="5dp" />
+
+        </LinearLayout>
+
+
+
+
 
         <LinearLayout
             android:orientation="vertical"
@@ -79,7 +108,7 @@
             android:layout_width="300dp"
             android:weightSum="5"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/date"
+            android:layout_below="@+id/secLiner"
             android:id="@+id/linearLayout">
 
             <LinearLayout
@@ -153,7 +182,6 @@
                         android:id="@+id/iv_more"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:src="@mipmap/ic_add"
                         android:layout_alignParentBottom="true"
                         android:layout_alignParentEnd="true"
                         android:visibility="gone"

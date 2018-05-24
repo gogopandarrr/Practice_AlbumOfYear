@@ -27,14 +27,17 @@ public class CommunityActivity extends AppCompatActivity {
     MyAdapter_Community adapter_community;
     ArrayList<Lists_LoadDB> loadDBs = new ArrayList<>();
     ArrayList<ArrayList<String>> listsCovers = new ArrayList<>();
+    String uid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_community);
+        Intent intent = getIntent();
+        uid = intent.getStringExtra("uid");
 
         dbRecycler = findViewById(R.id.db_recycler);
-        adapter_community = new MyAdapter_Community(this, loadDBs, listsCovers);
+        adapter_community = new MyAdapter_Community(this, loadDBs, listsCovers, uid);
         dbRecycler.setAdapter(adapter_community);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
@@ -42,6 +45,9 @@ public class CommunityActivity extends AppCompatActivity {
         dbRecycler.setLayoutManager(layoutManager);
 
         loadDB();
+
+
+
 
 
     }//oc
@@ -52,6 +58,8 @@ public class CommunityActivity extends AppCompatActivity {
 
 
     }
+
+
 
     public void loadDB(){
 
@@ -183,7 +191,23 @@ public class CommunityActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
             super.onActivityResult(requestCode, resultCode, data);
 
+        switch(requestCode){
 
+
+            case 333:
+                if(resultCode==RESULT_OK) {
+
+                    setResult(RESULT_OK,data);
+                    finish();
+
+                }
+                break;
+
+
+
+
+
+        }//switch
 
 
     }

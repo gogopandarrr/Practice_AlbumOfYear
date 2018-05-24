@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 
 import android.view.animation.OvershootInterpolator;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
@@ -35,7 +36,7 @@ import java.util.ArrayList;
  * Created by alfo06-07 on 2018-03-21.
  */
 
-public class MyAdapter2 extends RecyclerView.Adapter implements DraggableItemAdapter {
+public class MyAdapter_Make extends RecyclerView.Adapter implements DraggableItemAdapter {
 
     Context context;
     ArrayList<Lists_Album> listsAlbums;
@@ -52,7 +53,7 @@ public class MyAdapter2 extends RecyclerView.Adapter implements DraggableItemAda
 
 
 
-    public MyAdapter2(Context context, ArrayList<Lists_Album> listsAlbums, RecyclerView recyclerView) {
+    public MyAdapter_Make(Context context, ArrayList<Lists_Album> listsAlbums, RecyclerView recyclerView) {
         this.context = context;
         this.listsAlbums = listsAlbums;
         this.recyclerView = recyclerView;
@@ -68,9 +69,21 @@ public class MyAdapter2 extends RecyclerView.Adapter implements DraggableItemAda
 
         LayoutInflater inflater = LayoutInflater.from(context);
 
-        View itemView;
+        View itemView = null;
 
-            itemView = inflater.inflate(R.layout.info_music,parent,false);
+        switch (viewType){
+
+            case 0:
+                itemView = inflater.inflate(R.layout.info_music,parent,false);
+                break;
+
+            case 1:
+                itemView = inflater.inflate(R.layout.info_music,parent,false);
+                break;
+
+
+        }
+
             VH holder = new VH(itemView);
 
             return holder;
@@ -89,6 +102,9 @@ public class MyAdapter2 extends RecyclerView.Adapter implements DraggableItemAda
             vh.artist.setText(listsAlbum.artist);
             vh.title.setText(listsAlbum.album);
             vh.comment.setText(listsAlbum.opinion);
+
+            int rank = position+1;
+            vh.tv_rank.setText(rank+"");
 
 
             Glide.with(context).load(listsAlbum.cover).into(vh.cover);
@@ -143,6 +159,7 @@ public class MyAdapter2 extends RecyclerView.Adapter implements DraggableItemAda
     @Override
     public void onItemDragFinished(int fromPosition, int toPosition, boolean result) {
 
+      notifyDataSetChanged();
     }
 
 
@@ -154,19 +171,21 @@ public class MyAdapter2 extends RecyclerView.Adapter implements DraggableItemAda
     public class VH extends AbstractDraggableItemViewHolder {
 
         CardView info_card;
-        TextView artist, title;
+        TextView artist, title, tv_rank;
         ImageView bt_delete, bt_url;
         ViewSwitcher switcherT, switcherC;
         AutoLinkTextView comment;
         EditText ev_title, ev_comment;
-        ExpandableLayout expandableLayout;
+//        ExpandableLayout expandableLayout;
         ImageView btnOpen, cover;
-
+        FrameLayout rank_frame;
 
 
         public VH(final View itemView) {
             super(itemView);
 
+            rank_frame = itemView.findViewById(R.id.rank_layout);
+            tv_rank = itemView.findViewById(R.id.tv_rank);
             bt_url = itemView.findViewById(R.id.btn_url);
             cover= itemView.findViewById(R.id.cover);
             artist = itemView.findViewById(R.id.tv_artist);
@@ -179,44 +198,44 @@ public class MyAdapter2 extends RecyclerView.Adapter implements DraggableItemAda
             switcherT = itemView.findViewById(R.id.switcher_album);
             switcherC = itemView.findViewById(R.id.switcher_comment);
             btnOpen = itemView.findViewById(R.id.btn_open);
-            expandableLayout = itemView.findViewById(R.id.expandable_menu);
-            expandableLayout.setInterpolator(new OvershootInterpolator());
-            btnOpen.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    VH holder= (VH) recyclerView.findViewHolderForAdapterPosition(selectedItem);
-
-
-
-                    if( holder != null){
-                        btnOpen.setSelected(false);
-                        expandableLayout.collapse();
-                    }
-                    int position = getAdapterPosition();
-
-                    if(position == selectedItem){
-                        selectedItem = UNSELECTED;}
-
-                        else {
-                        btnOpen.setSelected(true);
-                        expandableLayout.expand();
-                        selectedItem = position;
-
-                    }
-
-
-                }
-            });
-            expandableLayout.setOnExpansionUpdateListener(new ExpandableLayout.OnExpansionUpdateListener() {
-                @Override
-                public void onExpansionUpdate(float expansionFraction, int state) {
-                    if (state == ExpandableLayout.State.EXPANDING){
-
-                        recyclerView.smoothScrollToPosition(getAdapterPosition());
-
-                    }
-                }
-            });
+//            expandableLayout = itemView.findViewById(R.id.expandable_menu);
+//            expandableLayout.setInterpolator(new OvershootInterpolator());
+//            btnOpen.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    VH holder= (VH) recyclerView.findViewHolderForAdapterPosition(selectedItem);
+//
+//
+//
+//                    if( holder != null){
+//                        btnOpen.setSelected(false);
+//                        expandableLayout.collapse();
+//                    }
+//                    int position = getAdapterPosition();
+//
+//                    if(position == selectedItem){
+//                        selectedItem = UNSELECTED;}
+//
+//                        else {
+//                        btnOpen.setSelected(true);
+//                        expandableLayout.expand();
+//                        selectedItem = position;
+//
+//                    }
+//
+//
+//                }
+//            });
+//            expandableLayout.setOnExpansionUpdateListener(new ExpandableLayout.OnExpansionUpdateListener() {
+//                @Override
+//                public void onExpansionUpdate(float expansionFraction, int state) {
+//                    if (state == ExpandableLayout.State.EXPANDING){
+//
+//                        recyclerView.smoothScrollToPosition(getAdapterPosition());
+//
+//                    }
+//                }
+//            });
 
 
 

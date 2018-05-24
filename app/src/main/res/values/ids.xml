@@ -3,7 +3,7 @@
     <item name="fab_save" type="id" />
     <item name="fab_add" type="id" />
     <item name="fab_back" type="id" />
-
+    <item name="fab_view" type="id" />
 
 
 </resources>

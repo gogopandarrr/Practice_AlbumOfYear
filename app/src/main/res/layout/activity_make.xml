@@ -32,6 +32,8 @@
         android:layout_gravity="right|bottom"
         android:layout_margin="2dp"
         app:sdExpansionMode="top"
+        app:sdMainFabOpenBackgroundColor="@color/material_lime_a200"
+        app:sdMainFabCloseBackgroundColor="@color/material_lime_a200"
         app:sdMainFabOpenSrc="@drawable/ic_menu"
         app:sdMainFabCloseSrc="@drawable/ic_close"
         app:layout_behavior="@string/speeddial_scrolling_view_snackbar_behavior"
@@ -63,7 +65,7 @@
                         android:id="@+id/tv_nameCollection"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:textColor="@color/material_red_a400"
+                        android:textColor="@color/material_lime_a700"
                         android:text="- title -"
                         android:textSize="18sp"
                         android:padding="10dp"
@@ -73,18 +75,10 @@
 
                 <android.support.v7.widget.RecyclerView
                     android:padding="4dp"
+                    android:visibility="visible"
                     android:id="@+id/info_recycler"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"> </android.support.v7.widget.RecyclerView>
-
-                <android.support.v7.widget.RecyclerView
-                    android:visibility="gone"
-                    android:id="@+id/cover_recycler"
-                    android:layout_width="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_height="wrap_content"> </android.support.v7.widget.RecyclerView>
-
-
 
                 <View
                     android:layout_width="match_parent"
