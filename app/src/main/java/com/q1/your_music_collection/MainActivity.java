@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
     JSONObject obj;
     TinyDB tinyDB;
     ArrayList<Object> stp;
-    String email, password, uid, name;
+    String email, password, uid = "none", name;
     FirebaseAuth mAuth;
     FirebaseUser user;
     boolean islogin = false;
@@ -116,6 +116,9 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
     public void clickMake(View v){
 
         Intent intent =  new Intent(this, MakeActivity.class);
+
+        int mode  = 111;
+        intent.putExtra("mode",mode);
         startActivityForResult(intent, 1);
 
     }
@@ -124,19 +127,22 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
 
         Intent intent = new Intent(this, CommunityActivity.class);
 
-        startActivityForResult(intent, 30);
+            intent.putExtra("uid", uid);
+
+
+        startActivityForResult(intent, 33);
 
 
     }
 
     public void clickEdit(View v){
         int position = discreteScrollView.getCurrentItem();
-        boolean modify = true;
+        int mode = 222;
 
         Intent intent = new Intent(this, MakeActivity.class);
         intent.putParcelableArrayListExtra("listAlbums",collections.get(position).getListsAlbums());
         intent.putExtra("nameList",collections.get(position).getNameList());
-        intent.putExtra("modify", modify);
+        intent.putExtra("mode", mode);
         intent.putExtra("position",position);
 
         startActivityForResult(intent, 20);
@@ -254,10 +260,11 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
 
 
 
-
-
-
     }
+
+
+
+
 
 
     public void saveToPhone(){
@@ -405,14 +412,30 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
 
 
 
+        }else if(resultCode==RESULT_OK&&requestCode==33){
+
+            listsAlbums = data.getParcelableArrayListExtra("myList");
+
+            collections.add(new Lists_Collection(listsAlbums, data.getStringExtra("nameList")));
+
+            adapterMain.notifyItemInserted(collections.size());
+
+            if(collections.size()>1) discreteScrollView.smoothScrollToPosition(collections.size()-1);
+
+
+
         }else if(resultCode==RESULT_OK&&requestCode==20){
 
-            int position = data.getIntExtra("position",0);
+            int position = data.getIntExtra("position",-1);
+
 
             listsAlbums = data.getParcelableArrayListExtra( "myList");
 
-            collections.set(position, new Lists_Collection(listsAlbums, data.getStringExtra("nameList")));
-
+            if(position!=-1) {
+                collections.set(position, new Lists_Collection(listsAlbums, data.getStringExtra("nameList")));
+            }else{
+                collections.add(new Lists_Collection(listsAlbums, data.getStringExtra("nameList")));
+            }
             refresh();
 
             discreteScrollView.smoothScrollToPosition(position);
@@ -424,9 +447,9 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
             password = data.getStringExtra("password");
             uid = data.getStringExtra("uid");
 
+
             tinyDB.putString("email",email);
             tinyDB.putString("password",password);
-            tinyDB.putString("uid",uid);
 
             mAuth = FirebaseAuth.getInstance();
             user = mAuth.getCurrentUser();
