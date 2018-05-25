@@ -280,10 +280,8 @@ public class MyAdapter_Make extends RecyclerView.Adapter implements DraggableIte
                             if(!hasFocus) {
 
                                 comment.setAutoLinkText(ev_comment.getText().toString());
+                                listsAlbum.setOpinion(comment.getText().toString());
                                 switcherC.showNext();
-                                listsAlbum.setOpinion(ev_comment.getText().toString());
-                                Log.e("a1",listsAlbum.getOpinion());
-
                             }
                         }
                     });

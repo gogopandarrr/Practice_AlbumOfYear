@@ -91,8 +91,6 @@ public class MakeActivity extends AppCompatActivity {
                         speedDialView.close();
                         return true;
 
-
-
                 }
 
                 return false;

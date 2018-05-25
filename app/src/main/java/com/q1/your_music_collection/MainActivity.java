@@ -248,7 +248,7 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
            multiPartRequest.addStringParam("Title", title);
            multiPartRequest.addStringParam("Name", name);
            multiPartRequest.addStringParam("UID", uid);
- 
+
            RequestQueue requestQueue = Volley.newRequestQueue(this);
 
 
