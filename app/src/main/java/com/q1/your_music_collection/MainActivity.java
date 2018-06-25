@@ -22,6 +22,9 @@ import com.android.volley.Response;
 import com.android.volley.error.VolleyError;
 import com.android.volley.request.SimpleMultiPartRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -125,6 +128,8 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
 
     public void clickCommunity(View v){
 
+        getAD();
+
         Intent intent = new Intent(this, CommunityActivity.class);
 
             intent.putExtra("uid", uid);
@@ -219,6 +224,8 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
     }
 
     public void clickUpload(View v){
+
+
 
        if(islogin){
 
@@ -483,6 +490,21 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
 
     }
 
+
+    private void getAD() {
+        final InterstitialAd ad = new InterstitialAd(this);
+        ad.setAdUnitId(getString(R.string.ad_unit_id));
+
+        ad.loadAd(new AdRequest.Builder().addTestDevice(AdRequest.DEVICE_ID_EMULATOR).build());
+
+        ad.setAdListener(new AdListener() {
+            @Override public void onAdLoaded() {
+                if (ad.isLoaded()) {
+                    ad.show();
+                }
+            }
+        });
+    }
 
 
 

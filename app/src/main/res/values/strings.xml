@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">your_music_collection</string>
+    <string name="app_name">Your Music Collection</string>
 
 
     <string name="title_activity_make">Make Activity</string>
@@ -86,6 +86,8 @@
     <string name="repeat_password">Repeat Password</string>
     <string name="next">NEXT</string>
     <string name="register">REGISTER</string>
+    <string name="ad_unit_id">ca-app-pub-7550247850069226/3494291642</string>
+
 
 </resources>
 
