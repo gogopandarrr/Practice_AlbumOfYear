@@ -61,6 +61,8 @@ public class MyAdapter_Community extends RecyclerView.Adapter {
 
         final VH holder = new VH(itemView);
 
+
+
         holder.bt_del.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -137,6 +139,8 @@ public class MyAdapter_Community extends RecyclerView.Adapter {
 
         if(uid.equals(loadDB.getUID())){
             vh.bt_del.setVisibility(View.VISIBLE);
+        }else{
+            vh.bt_del.setVisibility(View.INVISIBLE);
         }
 
 

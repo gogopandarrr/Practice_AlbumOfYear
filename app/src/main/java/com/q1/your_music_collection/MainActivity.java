@@ -105,6 +105,7 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
             islogin =false;
             userId.setText("sign in");
             userName.setVisibility(View.GONE);
+            uid = "";
 
         }else{
 
@@ -128,7 +129,7 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
 
     public void clickCommunity(View v){
 
-        getAD();
+//        getAD();
 
         Intent intent = new Intent(this, CommunityActivity.class);
 
@@ -491,20 +492,20 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
     }
 
 
-    private void getAD() {
-        final InterstitialAd ad = new InterstitialAd(this);
-        ad.setAdUnitId(getString(R.string.ad_unit_id));
-
-        ad.loadAd(new AdRequest.Builder().addTestDevice(AdRequest.DEVICE_ID_EMULATOR).build());
-
-        ad.setAdListener(new AdListener() {
-            @Override public void onAdLoaded() {
-                if (ad.isLoaded()) {
-                    ad.show();
-                }
-            }
-        });
-    }
+//    private void getAD() {
+//        final InterstitialAd ad = new InterstitialAd(this);
+//        ad.setAdUnitId(getString(R.string.ad_unit_id));
+//
+//        ad.loadAd(new AdRequest.Builder().addTestDevice(AdRequest.DEVICE_ID_EMULATOR).build());
+//
+//        ad.setAdListener(new AdListener() {
+//            @Override public void onAdLoaded() {
+//                if (ad.isLoaded()) {
+//                    ad.show();
+//                }
+//            }
+//        });
+//    }
 
 
 

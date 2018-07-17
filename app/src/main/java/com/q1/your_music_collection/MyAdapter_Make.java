@@ -244,27 +244,25 @@ public class MyAdapter_Make extends RecyclerView.Adapter implements DraggableIte
                 public boolean onLongClick(View view) {
                     ev_title.setText(title.getText().toString());
 
-                    ev_title.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                        @Override
-                        public void onFocusChange(View view, boolean hasFocus) {
-
-                            if(!hasFocus) {
-
-                                title.setText(ev_title.getText().toString());
-                                listsAlbum.setAlbum(title.getText().toString());
-                                switcherT.showNext();
-
-                            }
-                        }
-                    });
-
-                    switcherT.showNext();
-
+                   switcherT.showNext();
 
                     return true;
                 }
             });
 
+            ev_title.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View view, boolean hasFocus) {
+
+                    if(!hasFocus) {
+
+                        title.setText(ev_title.getText().toString());
+                        listsAlbum.setAlbum(ev_title.getText().toString());
+                        switcherT.showNext();
+
+                    }
+                }
+            });
 
             comment.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
