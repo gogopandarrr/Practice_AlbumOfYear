@@ -10,6 +10,8 @@ android:layout_marginTop="2dp"
 
     >
 
+
+
 <FrameLayout
     android:layout_margin="5dp"
     android:id="@+id/rank_layout"
@@ -57,56 +59,29 @@ android:layout_marginTop="2dp"
             android:layout_height="120dp" />
 
 
-        <ViewSwitcher
-            android:id="@+id/switcher_album"
-            android:layout_below="@id/tv_artist"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="150dp"
-            android:padding="2dp">
-
             <TextView
                 android:id="@+id/tv_albumTitle"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_below="@id/tv_artist"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="150dp"
+                android:padding="2dp"
                 android:text="album title"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
-            <EditText
-                android:id="@+id/ev_albumTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textSize="12sp"
-                android:text="album title"
-                android:textStyle="bold" />
-        </ViewSwitcher>
 
-        <ViewSwitcher
-            android:layout_below="@+id/switcher_album"
-            android:id="@+id/switcher_comment"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_toEndOf="@+id/cover"
-            android:layout_margin="10dp"
-            >
+
             <com.luseen.autolinklibrary.AutoLinkTextView
+                android:layout_below="@+id/tv_albumTitle"
                 android:id="@+id/tv_comment"
-                android:layout_width="180dp"
+                android:layout_width="200dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:hint="Press Long Click to Edit"
+                android:layout_toEndOf="@+id/cover"
+                android:layout_margin="10dp"
+                android:hint="Press Click to Edit"
                 android:textSize="12sp" />
 
-
-            <EditText
-                android:id="@+id/ev_comment"
-                android:layout_width="180dp"
-                android:layout_height="wrap_content"
-                android:hint="#Tag, Comment"
-                android:textSize="12sp" />
-        </ViewSwitcher>
 
         <TextView
             android:id="@+id/tv_artist"
@@ -147,9 +122,39 @@ android:layout_marginTop="2dp"
                 android:src="@drawable/btn_del" />
         </LinearLayout>
 
+        <net.cachapa.expandablelayout.ExpandableLayout
+            android:id="@+id/expandable_menu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:layout_below="@+id/tv_comment"
+            app:el_duration="1000"
+            app:el_expanded="true"
+            app:el_parallax="0.5">
+
+            <ImageView
+                android:id="@+id/save_btn"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_margin="8dp"
+                android:layout_marginVertical="10dp"
+                android:src="@drawable/ic_save" />
+
+            <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/ev_comment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="10dp"
+                android:textSize="10dp"
+                android:hint="write your comment" />
+        </net.cachapa.expandablelayout.ExpandableLayout>
 
 
-    </RelativeLayout>
+
+</RelativeLayout>
+
+
 
 </android.support.v7.widget.CardView>
 

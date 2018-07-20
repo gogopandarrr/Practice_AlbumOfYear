@@ -101,13 +101,18 @@ public class MyAdapter_Make extends RecyclerView.Adapter implements DraggableIte
 
             vh.artist.setText(listsAlbum.artist);
             vh.title.setText(listsAlbum.album);
-            vh.comment.setText(listsAlbum.opinion);
+
+
+            if(listsAlbum.opinion!="") vh.comment.setText(listsAlbum.opinion);
+            else vh.comment.setText(vh.ev_comment.getText().toString());
 
             int rank = position+1;
             vh.tv_rank.setText(rank+"");
 
 
             Glide.with(context).load(listsAlbum.cover).into(vh.cover);
+
+
 
     }
 
@@ -173,11 +178,10 @@ public class MyAdapter_Make extends RecyclerView.Adapter implements DraggableIte
         CardView info_card;
         TextView artist, title, tv_rank;
         ImageView bt_delete, bt_url;
-        ViewSwitcher switcherT, switcherC;
         AutoLinkTextView comment;
-        EditText ev_title, ev_comment;
-//        ExpandableLayout expandableLayout;
-        ImageView btnOpen, cover;
+        EditText ev_comment;
+        ExpandableLayout expandableLayout;
+        ImageView save_btn, cover;
         FrameLayout rank_frame;
 
 
@@ -193,102 +197,77 @@ public class MyAdapter_Make extends RecyclerView.Adapter implements DraggableIte
             info_card = itemView.findViewById(R.id.info_card);
             bt_delete = itemView.findViewById(R.id.bt_delete);
             comment = itemView.findViewById(R.id.tv_comment);
-            ev_title = itemView.findViewById(R.id.ev_albumTitle);
             ev_comment = itemView.findViewById(R.id.ev_comment);
-            switcherT = itemView.findViewById(R.id.switcher_album);
-            switcherC = itemView.findViewById(R.id.switcher_comment);
-            btnOpen = itemView.findViewById(R.id.btn_open);
-//            expandableLayout = itemView.findViewById(R.id.expandable_menu);
-//            expandableLayout.setInterpolator(new OvershootInterpolator());
-//            btnOpen.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    VH holder= (VH) recyclerView.findViewHolderForAdapterPosition(selectedItem);
-//
-//
-//
+            save_btn = itemView.findViewById(R.id.save_btn);
+
+            expandableLayout = itemView.findViewById(R.id.expandable_menu);
+            expandableLayout.setInterpolator(new OvershootInterpolator());
+            expandableLayout.collapse();
+
+            comment.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+
+                    VH holder= (VH) recyclerView.findViewHolderForAdapterPosition(selectedItem);
+
 //                    if( holder != null){
-//                        btnOpen.setSelected(false);
+//                        comment.setSelected(false);
 //                        expandableLayout.collapse();
 //                    }
-//                    int position = getAdapterPosition();
-//
-//                    if(position == selectedItem){
-//                        selectedItem = UNSELECTED;}
-//
-//                        else {
-//                        btnOpen.setSelected(true);
-//                        expandableLayout.expand();
-//                        selectedItem = position;
-//
-//                    }
-//
-//
-//                }
-//            });
-//            expandableLayout.setOnExpansionUpdateListener(new ExpandableLayout.OnExpansionUpdateListener() {
-//                @Override
-//                public void onExpansionUpdate(float expansionFraction, int state) {
-//                    if (state == ExpandableLayout.State.EXPANDING){
-//
-//                        recyclerView.smoothScrollToPosition(getAdapterPosition());
-//
-//                    }
-//                }
-//            });
 
 
+                    int position = getAdapterPosition();
 
-            title.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View view) {
-                    ev_title.setText(title.getText().toString());
 
-                   switcherT.showNext();
+                    if(position == selectedItem){
+                        selectedItem = UNSELECTED;}
+                        else {
+                        comment.setSelected(true);
+                        expandableLayout.expand();
+                        ev_comment.setText(comment.getText().toString());
+                        selectedItem = position;
 
-                    return true;
+                    }
+
+
                 }
             });
 
-            ev_title.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            save_btn.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onFocusChange(View view, boolean hasFocus) {
+                public void onClick(View view) {
 
-                    if(!hasFocus) {
 
-                        title.setText(ev_title.getText().toString());
-                        listsAlbum.setAlbum(ev_title.getText().toString());
-                        switcherT.showNext();
+
+                    comment.setText(ev_comment.getText().toString());
+                    int position = getAdapterPosition();
+                    listsAlbum = listsAlbums.get(position);
+                    listsAlbum.setOpinion(ev_comment.getText().toString());
+
+
+
+                    comment.setSelected(false);
+                    expandableLayout.collapse();
+
+
+                }
+            });
+
+
+
+
+            expandableLayout.setOnExpansionUpdateListener(new ExpandableLayout.OnExpansionUpdateListener() {
+                @Override
+                public void onExpansionUpdate(float expansionFraction, int state) {
+                    if (state == ExpandableLayout.State.EXPANDING){
+
+                        recyclerView.smoothScrollToPosition(getAdapterPosition());
 
                     }
                 }
             });
 
-            comment.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View view) {
-                    comment.addAutoLinkMode(AutoLinkMode.MODE_HASHTAG, AutoLinkMode.MODE_URL, AutoLinkMode.MODE_MENTION);
-                    ev_comment.setText(comment.getText().toString());
-
-                    ev_comment.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                        @Override
-                        public void onFocusChange(View view, boolean hasFocus) {
-
-
-                            if(!hasFocus) {
-
-                                comment.setAutoLinkText(ev_comment.getText().toString());
-                                listsAlbum.setOpinion(comment.getText().toString());
-                                switcherC.showNext();
-                            }
-                        }
-                    });
-
-                    switcherC.showNext();
-
-                    return true;
-                }
-            });
 
 
 
