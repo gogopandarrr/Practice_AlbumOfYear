@@ -195,14 +195,16 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
                 innerObj.put("artist", collections.get(position).getListsAlbums().get(i).getArtist());
                 innerObj.put("album", collections.get(position).getListsAlbums().get(i).getAlbum());
                 innerObj.put("cover", collections.get(position).getListsAlbums().get(i).getCover());
-                innerObj.put("rank",collections.get(position).getListsAlbums().get(i).getRankImg());
-                if(collections.get(position).getListsAlbums().get(i).getOpinion()!=null)
-                innerObj.put("opinion",collections.get(position).getListsAlbums().get(i).getOpinion());
-                else
-                    innerObj.put("opinion","None");
+                innerObj.put("rank", collections.get(position).getListsAlbums().get(i).getRankImg());
                 innerObj.put("info", collections.get(position).getListsAlbums().get(i).getUrl());
 
+                if(collections.get(position).getListsAlbums().get(i).getOpinion()!=null)
+                innerObj.put("opinion",collections.get(position).getListsAlbums().get(i).getOpinion());
+                else innerObj.put("opinion","");
+
+
                 jarray.put(innerObj);
+
 
         }//for
 
@@ -360,8 +362,8 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
     private void showTextInputDialog() {
         new LovelyTextInputDialog(this, R.style.EditTextTintTheme)
                 .setTopColorRes(R.color.darkDeepOrange)
-                .setTitle(R.string.text_input_title)
-                .setIcon(R.drawable.ic_listen)
+                .setTitle(R.string.text_input_nick)
+                .setIcon(R.drawable.ic_like)
                 .setConfirmButton(android.R.string.ok, new LovelyTextInputDialog.OnTextInputConfirmListener() {
                     @Override
                     public void onTextInputConfirmed(String text) {

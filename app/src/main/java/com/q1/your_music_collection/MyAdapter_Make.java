@@ -3,6 +3,7 @@ package com.q1.your_music_collection;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -181,7 +182,7 @@ public class MyAdapter_Make extends RecyclerView.Adapter implements DraggableIte
         AutoLinkTextView comment;
         EditText ev_comment;
         ExpandableLayout expandableLayout;
-        ImageView save_btn, cover;
+        ImageView save_btn, cancel_btn, cover;
         FrameLayout rank_frame;
 
 
@@ -199,18 +200,34 @@ public class MyAdapter_Make extends RecyclerView.Adapter implements DraggableIte
             comment = itemView.findViewById(R.id.tv_comment);
             ev_comment = itemView.findViewById(R.id.ev_comment);
             save_btn = itemView.findViewById(R.id.save_btn);
+            cancel_btn= itemView.findViewById(R.id.cancel_btn);
+
 
             expandableLayout = itemView.findViewById(R.id.expandable_menu);
             expandableLayout.setInterpolator(new OvershootInterpolator());
             expandableLayout.collapse();
+
+
+
+            comment.addAutoLinkMode(
+                    AutoLinkMode.MODE_HASHTAG,
+                    AutoLinkMode.MODE_PHONE,
+                    AutoLinkMode.MODE_URL,
+                    AutoLinkMode.MODE_MENTION);
+
+
+            comment.setHashtagModeColor(ContextCompat.getColor(context, R.color.color2));
+            comment.setPhoneModeColor(ContextCompat.getColor(context, R.color.color3));
+            comment.setMentionModeColor(ContextCompat.getColor(context, R.color.color5));
+
+
 
             comment.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
 
-                    VH holder= (VH) recyclerView.findViewHolderForAdapterPosition(selectedItem);
-
+//                    VH holder= (VH) recyclerView.findViewHolderForAdapterPosition(selectedItem);
 //                    if( holder != null){
 //                        comment.setSelected(false);
 //                        expandableLayout.collapse();
@@ -240,7 +257,7 @@ public class MyAdapter_Make extends RecyclerView.Adapter implements DraggableIte
 
 
 
-                    comment.setText(ev_comment.getText().toString());
+                    comment.setAutoLinkText(ev_comment.getText().toString());
                     int position = getAdapterPosition();
                     listsAlbum = listsAlbums.get(position);
                     listsAlbum.setOpinion(ev_comment.getText().toString());
@@ -250,6 +267,16 @@ public class MyAdapter_Make extends RecyclerView.Adapter implements DraggableIte
                     comment.setSelected(false);
                     expandableLayout.collapse();
 
+
+                }
+            });
+
+            cancel_btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    comment.setSelected(false);
+                    expandableLayout.collapse();
 
                 }
             });

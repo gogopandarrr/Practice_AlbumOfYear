@@ -66,6 +66,7 @@
 
 
     <string name="text_input_title">Type name of this list</string>
+    <string name="text_input_nick">Type your Nickname</string>
     <string name="basic_title_make">Make Your Own Collection</string>
 
 
