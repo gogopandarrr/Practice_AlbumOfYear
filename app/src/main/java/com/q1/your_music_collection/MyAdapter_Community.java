@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -71,6 +72,7 @@ public class MyAdapter_Community extends RecyclerView.Adapter {
                 loadDB = loadDBs.get(p);
                 title = loadDB.getTitle();
                 date = loadDB.getDate();
+
 
                 String serverUrl="http://gogopanda.dothome.co.kr/yourCollections/deleteDB.php";
 
@@ -149,21 +151,8 @@ public class MyAdapter_Community extends RecyclerView.Adapter {
         vh.user.setText(loadDB.getName());
         vh.tv_date.setText(loadDB.getDate());
 
-
-
-
-
-        if(coverlist.size()>5) {
-            vh.linearLayout.setVisibility(View.VISIBLE);
-            vh.more.setVisibility(View.VISIBLE);
-        }
-
-        for(int i=0; i < coverlist.size(); i++){
-
-            if(i<10)
-            Glide.with(context).load(coverlist.get(i)).into(vh.iv[i]);
-
-        }
+        vh.adapter_coverView= new MyAdapter_CoverView(context, coverlist);
+        vh.recyclerView.setAdapter(vh.adapter_coverView);
 
 
 
@@ -185,9 +174,13 @@ public class MyAdapter_Community extends RecyclerView.Adapter {
     class VH extends RecyclerView.ViewHolder{
 
         TextView user, tv_title, tv_date, tv_total;
-        ImageView iv[] = new ImageView[10];
-        LinearLayout linearLayout;
         ImageView more, bt_dbv, bt_del;
+
+        MyAdapter_CoverView adapter_coverView;
+        RecyclerView recyclerView;
+
+
+
 
 
         public VH(View itemView) {
@@ -197,20 +190,15 @@ public class MyAdapter_Community extends RecyclerView.Adapter {
             bt_del = itemView.findViewById(R.id.bt_del);
             bt_dbv = itemView.findViewById(R.id.bt_dbv);
             tv_date = itemView.findViewById(R.id.date);
-             more = itemView.findViewById(R.id.iv_more);
-            linearLayout = itemView.findViewById(R.id.line2);
             user = itemView.findViewById(R.id.tv_user);
             tv_title = itemView.findViewById(R.id.tv_db_title);
-            iv[0] = itemView.findViewById(R.id.iv1);
-            iv[1] = itemView.findViewById(R.id.iv2);
-            iv[2] = itemView.findViewById(R.id.iv3);
-            iv[3] = itemView.findViewById(R.id.iv4);
-            iv[4] = itemView.findViewById(R.id.iv5);
-            iv[5] = itemView.findViewById(R.id.iv6);
-            iv[6] = itemView.findViewById(R.id.iv7);
-            iv[7] = itemView.findViewById(R.id.iv8);
-            iv[8] = itemView.findViewById(R.id.iv9);
-            iv[9] = itemView.findViewById(R.id.iv10);
+
+
+            recyclerView= itemView.findViewById(R.id.coverView);
+
+            RecyclerView.LayoutManager layoutManager = new GridLayoutManager(context, 3);
+            recyclerView.setLayoutManager(layoutManager);
+            recyclerView.addItemDecoration(new CustomRecyclerDecoration(3, 0, false, 0));
 
 
         }

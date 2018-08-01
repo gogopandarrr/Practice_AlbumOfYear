@@ -27,15 +27,12 @@ public class MyAdapter_CoverView extends RecyclerView.Adapter {
 
     VH vh;
     Context context;
-    ArrayList<Lists_Album> listsAlbums;
-    RecyclerView recyclerView;
-    private static final int UNSELECTED = -1;
-    private int selectedItem = UNSELECTED;
+    ArrayList<String> coverlist;
 
-    public MyAdapter_CoverView(Context context, ArrayList<Lists_Album> listsAlbums, RecyclerView recyclerView) {
+
+    public MyAdapter_CoverView(Context context, ArrayList<String> coverlist) {
         this.context = context;
-        this.listsAlbums = listsAlbums;
-        this.recyclerView = recyclerView;
+        this.coverlist = coverlist;
 
     }
 
@@ -67,13 +64,8 @@ public class MyAdapter_CoverView extends RecyclerView.Adapter {
             vh = (VH) holder;
 
 
+                Glide.with(context).load(coverlist.get(position)).into(vh.cover);
 
-                Lists_Album listsAlbum = listsAlbums.get(position);
-
-
-                Glide.with(context).load(listsAlbum.cover).into(vh.cover);
-
-                vh.comment.setText(listsAlbum.getOpinion());
 
 
 
@@ -82,7 +74,7 @@ public class MyAdapter_CoverView extends RecyclerView.Adapter {
     @Override
     public int getItemCount() {
 
-        return listsAlbums.size();
+        return coverlist.size();
     }
 
 
@@ -90,46 +82,16 @@ public class MyAdapter_CoverView extends RecyclerView.Adapter {
 
     class VH extends RecyclerView.ViewHolder {
 
-        CardView cardView;
-        ImageView cover, rating, open;
-        ExpandableLayout expandableLayout;
-        AutoLinkTextView comment;
+
+        ImageView cover;
 
 
         public VH(View itemView) {
+
             super(itemView);
 
+            cover= itemView.findViewById(R.id.cover_min);
 
-                comment = itemView.findViewById(R.id.tv_comment);
-                comment.addAutoLinkMode(AutoLinkMode.MODE_HASHTAG, AutoLinkMode.MODE_URL, AutoLinkMode.MODE_MENTION);
-                open = itemView.findViewById(R.id.btn_open);
-                cardView = itemView.findViewById(R.id.viewCard);
-                cover = itemView.findViewById(R.id.iv_cover);
-                rating = itemView.findViewById(R.id.iv_rating);
-                expandableLayout = itemView.findViewById(R.id.expandable_menu);
-
-
-                open.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        VH holder= (VH) recyclerView.findViewHolderForAdapterPosition(selectedItem);
-
-
-                        if( holder != null){
-                            open.setSelected(false);
-                            expandableLayout.collapse();
-                        }
-                        int position = getAdapterPosition();
-
-                        if(position == selectedItem){
-                            selectedItem = UNSELECTED;}
-
-                        else {
-                            open.setSelected(true);
-                            expandableLayout.expand();
-                            selectedItem = position;
-                    }
-                }});
 
 
 

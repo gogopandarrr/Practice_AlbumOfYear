@@ -123,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
 
         int mode  = 111;
         intent.putExtra("mode",mode);
-        startActivityForResult(intent, 1);
+        startActivityForResult(intent, 11);
 
     }
 
@@ -410,15 +410,19 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
         super.onActivityResult(requestCode, resultCode, data);
 
 
-        if(resultCode==RESULT_OK&&requestCode==1){
+        if(resultCode==RESULT_OK&&requestCode==11){
 
             listsAlbums = data.getParcelableArrayListExtra("myList");
+
 
             collections.add(new Lists_Collection(listsAlbums, data.getStringExtra("nameList")));
 
             adapterMain.notifyItemInserted(collections.size());
 
-            if(collections.size()>1) discreteScrollView.smoothScrollToPosition(collections.size()-1);
+
+
+            if(collections.size()>1) discreteScrollView.scrollToPosition(collections.size()-1);
+
 
 
 
@@ -430,7 +434,8 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
 
             adapterMain.notifyItemInserted(collections.size());
 
-            if(collections.size()>1) discreteScrollView.smoothScrollToPosition(collections.size()-1);
+
+            if(collections.size()>1) discreteScrollView.scrollToPosition(collections.size()-1);
 
 
 
@@ -448,7 +453,7 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
             }
             refresh();
 
-            discreteScrollView.smoothScrollToPosition(position);
+            discreteScrollView.scrollToPosition(position);
 
 
         }else if(resultCode==RESULT_OK&&requestCode==0){
@@ -494,20 +499,6 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
     }
 
 
-//    private void getAD() {
-//        final InterstitialAd ad = new InterstitialAd(this);
-//        ad.setAdUnitId(getString(R.string.ad_unit_id));
-//
-//        ad.loadAd(new AdRequest.Builder().addTestDevice(AdRequest.DEVICE_ID_EMULATOR).build());
-//
-//        ad.setAdListener(new AdListener() {
-//            @Override public void onAdLoaded() {
-//                if (ad.isLoaded()) {
-//                    ad.show();
-//                }
-//            }
-//        });
-//    }
 
 
 
