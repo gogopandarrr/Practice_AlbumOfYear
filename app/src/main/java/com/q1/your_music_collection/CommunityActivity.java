@@ -37,7 +37,7 @@ public class CommunityActivity extends AppCompatActivity {
         uid = intent.getStringExtra("uid");
 
         dbRecycler = findViewById(R.id.db_recycler);
-        adapter_community = new MyAdapter_Community(this, loadDBs, listsCovers, uid);
+        adapter_community = new MyAdapter_Community(this, loadDBs, listsCovers, uid, dbRecycler);
         dbRecycler.setAdapter(adapter_community);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);

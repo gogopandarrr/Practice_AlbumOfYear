@@ -100,6 +100,9 @@ public class MyAdapter_Make extends RecyclerView.Adapter implements DraggableIte
 
             vh = (VH) holder;
 
+
+            ((VH) holder).bind();
+
             vh.artist.setText(listsAlbum.artist);
             vh.title.setText(listsAlbum.album);
 
@@ -205,7 +208,6 @@ public class MyAdapter_Make extends RecyclerView.Adapter implements DraggableIte
 
             expandableLayout = itemView.findViewById(R.id.expandable_menu);
             expandableLayout.setInterpolator(new OvershootInterpolator());
-            expandableLayout.collapse();
 
 
 
@@ -318,6 +320,14 @@ public class MyAdapter_Make extends RecyclerView.Adapter implements DraggableIte
             });
 
 
+        }
+
+
+        public void bind() {
+            int position = getAdapterPosition();
+            boolean isSelected = position == selectedItem;
+            comment.setSelected(isSelected);
+            expandableLayout.setExpanded(isSelected, false);
         }
 
         private void startBrowserActivity(int mode) {

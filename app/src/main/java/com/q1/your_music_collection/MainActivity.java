@@ -164,9 +164,9 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
 
         refresh();
 
-        if(position>0)  discreteScrollView.smoothScrollToPosition(position-1);
-
         saveToPhone();
+
+        if(position>0)  discreteScrollView.scrollToPosition(position-1);
     }
 
     public void refresh(){
